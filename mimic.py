@@ -4,10 +4,16 @@
 from twython import Twython
 from secret import *
 
-#This will get test information from file
-def getTweetsTest():
-    
+#This will get test information from file and put it into an array
+def getTweetsTest(fileName):
+    with open(fileName, "r") as inputFile:
+        lc = inputFile.read().lower() #Set to lower case
+        split = lc.split()
+        return split
 
 def outputToTwitter(user, tweet):  
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     twitter.update_status(status= user + "\n" + tweet)
+
+print("Original text:")
+print(getTweetsTest("testData.txt"))
