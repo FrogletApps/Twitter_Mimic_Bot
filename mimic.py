@@ -13,7 +13,7 @@ def getTweetsTest(fileName):
         fileContents (string[]):  Array of words in file in lower case.
     '''
     with open(fileName, "r") as inputFile:
-        return inputFile.read().lower().split #Set to lower case and split into array
+        return inputFile.read().lower().split() #Set to lower case and split into array
 
 def outputToTwitter(user, tweet):  
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
