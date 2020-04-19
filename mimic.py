@@ -57,6 +57,15 @@ def printDictionary(dictionary):
     for item in dictionary:
         print("Key:{}, Value:{}".format(item, dictionary[item]))
 
+def print2dArray(arrayToPrint):
+    '''
+    Print a 2D array
+    Parameters:
+        arrayToPrint ([]):  Array to print
+    '''
+    for x in arrayToPrint:
+        print(x)
+
 print("Original text:")
 words = getTweetsTest("testData.txt")
 print(words)
