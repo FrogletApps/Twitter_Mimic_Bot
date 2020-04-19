@@ -15,6 +15,31 @@ def getTweetsTest(fileName):
     with open(fileName, "r") as inputFile:
         return inputFile.read().lower().split() #Set to lower case and split into array
 
+def createDictionary(wordArray):
+    '''
+    This will put the data into two dictionaries
+    Parameters:
+        wordArray (string[]):  Array of words
+    Returns:
+        integerToString (dict):  Dictionary arranged by integers and storing strings
+        stringToInteger (dict):  Dictionary arranged by strings and storing integers
+    '''
+    counter = 0
+    integerToString = {}
+    for i in wordArray:
+        if i not in integerToString.values():
+            integerToString[counter] = i
+            counter += 1
+    
+    counter = 0
+    stringToInteger = {}
+    for i in wordArray:
+        if i not in stringToInteger.keys():
+            stringToInteger[i] = counter
+            counter += 1
+
+    return [integerToString, stringToInteger]
+
 def outputToTwitter(user, tweet):  
     '''
     Post data to Twitter
