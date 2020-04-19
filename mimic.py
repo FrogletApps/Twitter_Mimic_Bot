@@ -6,7 +6,7 @@ from secret import *
 
 def getTweetsTest(fileName):
     '''
-    This will get test information from file and put it into an array
+    This will get test information from file and put it into an array (in lower case)
     Parameters:
         filename (string):  Location of the test data file
     Returns:
@@ -55,7 +55,7 @@ def printDictionary(dictionary):
         dictionary (dict):  Dictionary to print
     '''
     for item in dictionary:
-        print("Key : {} , Value : {}".format(item, dictionary[item]))
+        print("Key:{}, Value:{}".format(item, dictionary[item]))
 
 print("Original text:")
 words = getTweetsTest("testData.txt")
