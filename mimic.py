@@ -60,4 +60,11 @@ def printDictionary(dictionary):
         print("Key : {} , Value : {}".format(item, dictionary[item]))
 
 print("Original text:")
-print(getTweetsTest("testData.txt"))
+words = getTweetsTest("testData.txt")
+print(words)
+
+dicts = createDictionary(words)
+print("\nInteger to string:")
+print(printDictionary(dicts[0]))
+print("\nString to integer:")
+print(printDictionary(dicts[1]))
