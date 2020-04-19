@@ -24,19 +24,17 @@ def createDictionary(wordArray):
         integerToString (dict):  Dictionary arranged by integers and storing strings
         stringToInteger (dict):  Dictionary arranged by strings and storing integers
     '''
-    counter = 0
+    counterITS = 0
+    counterSTI = 0
     integerToString = {}
-    for i in wordArray:
-        if i not in integerToString.values():
-            integerToString[counter] = i
-            counter += 1
-    
-    counter = 0
     stringToInteger = {}
     for i in wordArray:
+        if i not in integerToString.values():
+            integerToString[counterITS] = i
+            counterITS += 1
         if i not in stringToInteger.keys():
-            stringToInteger[i] = counter
-            counter += 1
+            stringToInteger[i] = counterSTI
+            counterSTI += 1
 
     return [integerToString, stringToInteger]
 
