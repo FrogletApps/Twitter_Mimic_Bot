@@ -16,6 +16,12 @@ def getTweetsTest(fileName):
         return inputFile.read().lower().split() #Set to lower case and split into array
 
 def outputToTwitter(user, tweet):  
+    '''
+    Post data to Twitter
+    Parameters:
+        user (string):  The username that is being impersonated
+        tweet (string):  The tweet that has been generated
+    '''
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     twitter.update_status(status= user + "\n" + tweet)
 
