@@ -38,6 +38,20 @@ def createDictionary(wordArray):
 
     return [integerToString, stringToInteger]
 
+def count(integerToStringDict, size):
+    '''
+    This create an array counting the number of times a word follows another word
+    Parameters:
+        integerToStringDict (dict):  Integer to string dictionary
+        size (int): Size of the output array (size * size)
+    Returns:
+        countArray (int[]):  An array counting the number of time a word follows another word
+    '''
+    countArray = [[]]
+
+
+    return countArray
+
 def outputToTwitter(user, tweet):  
     '''
     Post data to Twitter
