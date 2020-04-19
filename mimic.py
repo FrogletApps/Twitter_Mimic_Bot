@@ -25,5 +25,14 @@ def outputToTwitter(user, tweet):
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     twitter.update_status(status= user + "\n" + tweet)
 
+def printDictionary(dictionary):
+    '''
+    Print a dictionary (from: https://www.codevscolor.com/python-print-key-value-dictionary/)
+    Parameters:
+        dictionary (dict):  Dictionary to print
+    '''
+    for item in dictionary:
+        print("Key : {} , Value : {}".format(item, dictionary[item]))
+
 print("Original text:")
 print(getTweetsTest("testData.txt"))
