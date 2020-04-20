@@ -59,6 +59,22 @@ def count(wordArray, stringToInteger):
 
     return countArray
 
+def rowTotals(countArray):
+    '''
+    This creates an array of the sum of each row of given 2D array
+    Parameters:
+        countArray (int[][]):  2D array of numbers
+    Returns:
+        rowCountArray (int[]):  An array of the sum of each row of the given 2D array
+    '''
+    rowCountArray = [0]*len(countArray)
+    i = 0
+    for y in countArray:
+        for x in y:
+            rowCountArray[i] += x
+        i += 1
+    return rowCountArray
+
 def outputToTwitter(user, tweet):  
     '''
     Post data to Twitter
@@ -98,4 +114,12 @@ print("\nString to integer:")
 stringToIntegerDict = dicts[1]
 print(printDictionary(stringToIntegerDict))
 
-print2dArray(count(words, stringToIntegerDict))
+print("")
+countArray = count(words, stringToIntegerDict)
+print2dArray(countArray)
+
+print("")
+print(rowTotals(countArray))
+
+
+
