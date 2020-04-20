@@ -159,24 +159,38 @@ def print2dArray(arrayToPrint):
     for x in arrayToPrint:
         print(x)
 
-print("Original text:")
-words = getTweetsTest("testData.txt")
-print(words)
+# print("Original text:")
+# wordArray = getTweetsTest("testData.txt")
+# print(wordArray)
 
-dicts = createDictionary(words)
-print("\nInteger to string:")
-print(printDictionary(dicts[0]))
-print("\nString to integer:")
+# dicts = createDictionary(wordArray)
+# print("\nInteger to string:")
+# integerToStringDict = dicts[0]
+# print(printDictionary(integerToStringDict))
+# print("\nString to integer:")
+# stringToIntegerDict = dicts[1]
+# print(printDictionary(stringToIntegerDict))
+
+# print("")
+# countArray = count(wordArray, stringToIntegerDict)
+# print2dArray(countArray)
+
+# print("")
+# rowCountArray = rowTotals(countArray)
+# print(rowCountArray)
+
+# print("")
+# probArray = calcProbabilities(countArray, rowCountArray)
+# print2dArray(probArray)
+
+# print("")
+# print(writeTweet(integerToStringDict, probArray, 6))
+
+wordArray = getTweetsTest("testData.txt")
+dicts = createDictionary(wordArray)
+integerToStringDict = dicts[0]
 stringToIntegerDict = dicts[1]
-print(printDictionary(stringToIntegerDict))
-
-print("")
-countArray = count(words, stringToIntegerDict)
-print2dArray(countArray)
-
-print("")
+countArray = count(wordArray, stringToIntegerDict)
 rowCountArray = rowTotals(countArray)
-print(rowCountArray)
-
-print("")
-print2dArray(calcProbabilities(countArray, rowCountArray))
+probArray = calcProbabilities(countArray, rowCountArray)
+print(writeTweet(integerToStringDict, probArray, 6))
