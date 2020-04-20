@@ -162,7 +162,7 @@ def outputToTwitter(user, tweet):
         user (string):  The username that is being impersonated
         tweet (string):  The tweet that has been generated
     '''
-    twitter.update_status(status= user + "\n" + tweet)
+    twitter.update_status(status= "User: " + user + "\nGenerated Tweet: " + tweet)
 
 def printDictionary(dictionary):
     '''
@@ -209,11 +209,20 @@ def print2dArray(arrayToPrint):
 # print("")
 # print(writeTweet(integerToStringDict, probArray, 6))
 
-wordArray = getTweetsTest("testData.txt")
+#print(readTweetsByUser("qikipedia", 200, False))
+
+#wordArray = getTweetsTest("testData.txt")
+twitterUser = "qikipedia"
+wordArray = readTweetsByUser(twitterUser, 200, False)
 dicts = createDictionary(wordArray)
 integerToStringDict = dicts[0]
 stringToIntegerDict = dicts[1]
 countArray = count(wordArray, stringToIntegerDict)
 rowCountArray = rowTotals(countArray)
 probArray = calcProbabilities(countArray, rowCountArray)
-print(writeTweet(integerToStringDict, probArray, 6))
+tweet = writeTweet(integerToStringDict, probArray, 33)
+
+print(tweet)
+
+#outputToTwitter(twitterUser, tweet)
+
