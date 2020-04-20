@@ -3,6 +3,7 @@
 
 from twython import Twython
 from secret import *
+from random import randint, random
 
 def getTweetsTest(fileName):
     '''
@@ -99,6 +100,33 @@ def calcProbabilities(countArray, rowCountArray):
         yCount += 1
     return probArray
 
+def writeTweet(integerToString, probArray, wordCount):
+    '''
+    This creates an array of the probability of a word following another word
+    Parameters:
+        integerToString (dict):  Dictionary arranged by integers and storing strings
+        probArray (int[][]):  A 2D array of the probabilities that a given word with follow another word
+        wordCount (int):  The number of words to put in the tweet
+    Returns:
+        tweet (string):  A tweet which should mimic a Twitter user
+    '''
+    tweet = [""]*wordCount
+    wordInt = randint(0, len(integerToString) - 1)
+    randomProb = 0
+
+    for i in range(0, wordCount):
+        #print(integerToString[wordInt])
+        tweet[i] = integerToString[wordInt]
+        randomProb = random()
+
+        for j in range(0, len(integerToString)):
+            #print(str(probArray[wordInt][j]) + " > " + str(randomProb) + " : " + integerToString[j])
+            if (probArray[wordInt][j] > randomProb):
+                wordInt = j
+                break
+
+    return tweet
+    
 def outputToTwitter(user, tweet):  
     '''
     Post data to Twitter
