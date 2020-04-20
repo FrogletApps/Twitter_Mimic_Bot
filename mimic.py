@@ -92,8 +92,11 @@ def calcProbabilities(countArray, rowCountArray):
     for y in countArray:
         cumulativeProb = 0
         for x in y:
-            print(round((x/rowCountArray[yCount]) + cumulativeProb, 2))
-            probArray[yCount][xCount] = round((x/rowCountArray[yCount]) + cumulativeProb, 2)
+            if (rowCountArray[yCount] != 0):
+                #print(round((x/rowCountArray[yCount]) + cumulativeProb, 2))
+                probArray[yCount][xCount] = round((x/rowCountArray[yCount]) + cumulativeProb, 2)
+            else:
+                probArray[yCount][xCount] = cumulativeProb
             cumulativeProb = probArray[yCount][xCount]
             xCount += 1
         xCount = 0
