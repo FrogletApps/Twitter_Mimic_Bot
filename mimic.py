@@ -75,6 +75,30 @@ def rowTotals(countArray):
         i += 1
     return rowCountArray
 
+def calcProbabilities(countArray, rowCountArray):
+    '''
+    This creates an array of the probability of a word following another word
+    Parameters:
+        countArray (int[][]):  2D array of numbers
+    Returns:
+        rowCountArray (int[]):  An array of the sum of each row of the given 2D array
+    '''
+    arraySize = len(countArray)
+    probArray = [[0] * (arraySize) for _ in range(arraySize)] #https://stackoverflow.com/questions/13157961
+    xCount = 0
+    yCount = 0
+
+    for y in countArray:
+        cumulativeProb = 0
+        for x in y:
+            print(round((x/rowCountArray[yCount]) + cumulativeProb, 2))
+            probArray[yCount][xCount] = round((x/rowCountArray[yCount]) + cumulativeProb, 2)
+            cumulativeProb = probArray[yCount][xCount]
+            xCount += 1
+        xCount = 0
+        yCount += 1
+    return probArray
+
 def outputToTwitter(user, tweet):  
     '''
     Post data to Twitter
@@ -119,7 +143,8 @@ countArray = count(words, stringToIntegerDict)
 print2dArray(countArray)
 
 print("")
-print(rowTotals(countArray))
+rowCountArray = rowTotals(countArray)
+print(rowCountArray)
 
-
-
+print("")
+print2dArray(calcProbabilities(countArray, rowCountArray))
