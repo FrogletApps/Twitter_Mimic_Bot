@@ -5,16 +5,40 @@ from twython import Twython
 from secret import *
 from random import randint, random
 
+twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+
 def getTweetsTest(fileName):
     '''
     This will get test information from file and put it into an array (in lower case)
     Parameters:
         filename (string):  Location of the test data file
     Returns:
-        fileContents (string[]):  Array of words in file in lower case.
+        wordArray (string[]):  Array of words in file in lower case.
     '''
     with open(fileName, "r") as inputFile:
         return inputFile.read().lower().split() #Set to lower case and split into array
+
+def readTweetsByUser(username, limit=200, retweets=False):
+    '''
+    This will get tweets from Twitter
+    Parameters:
+        username (string):  The user whose tweets you want to recieve
+        limit (int):  The number of tweets you want to recieve (this is the maximum you can get, there is a limit of 200, and even if you disable retweets they are still counted) (default:200)
+        retweets (Boolean):  Enable retweets or not (default:False)
+    Returns:
+        wordArray (string[]):  Array of words in file in lower case.
+    '''
+    data = twitter.get_user_timeline(screen_name="@"+username, count=limit, include_rts=retweets, tweet_mode='extended')
+    wordArray = []
+    for tweet in data:
+        #print(tweet)
+        #print()
+        tweetWords = []
+        tweetWords = tweet.get("full_text").lower().split()
+        for word in tweetWords:
+            wordArray.append(word)
+
+    return wordArray
 
 def createDictionary(wordArray):
     '''
@@ -138,7 +162,6 @@ def outputToTwitter(user, tweet):
         user (string):  The username that is being impersonated
         tweet (string):  The tweet that has been generated
     '''
-    twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     twitter.update_status(status= user + "\n" + tweet)
 
 def printDictionary(dictionary):
