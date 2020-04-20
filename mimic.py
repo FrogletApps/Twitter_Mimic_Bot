@@ -81,8 +81,9 @@ def calcProbabilities(countArray, rowCountArray):
     This creates an array of the probability of a word following another word
     Parameters:
         countArray (int[][]):  2D array of numbers
-    Returns:
         rowCountArray (int[]):  An array of the sum of each row of the given 2D array
+    Returns:
+        probArray (int[][]):  A 2D array of the probabilities that a given word with follow another word
     '''
     arraySize = len(countArray)
     probArray = [[0] * (arraySize) for _ in range(arraySize)] #https://stackoverflow.com/questions/13157961
