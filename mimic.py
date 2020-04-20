@@ -131,13 +131,13 @@ def calcProbabilities(countArray, rowCountArray):
         yCount += 1
     return probArray
 
-def writeTweet(integerToString, probArray, wordCount):
+def generateTweet(integerToString, probArray, wordCount):
     '''
     This creates an array of the probability of a word following another word
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
         probArray (int[][]):  A 2D array of the probabilities that a given word with follow another word
-        wordCount (int):  The number of words to put in the tweet
+        wordCount (int):  The number of words to put in the tweet (this is a limit, it could stop earlier if there is punctuation)
     Returns:
         tweet (string):  A tweet which should mimic a Twitter user
     '''
@@ -147,7 +147,11 @@ def writeTweet(integerToString, probArray, wordCount):
 
     for i in range(0, wordCount):
         #print(integerToString[wordInt])
-        tweet[i] = integerToString[wordInt]
+        newWord = integerToString[wordInt]
+        tweet[i] = newWord
+        #If the last character is an end of sentence punctuation mark then end the tweet
+        if newWord[-1:] in ["!", "?" ,"."]:
+            break; #Stop generating text by telling the for loop it's at the end
         randomProb = random()
 
         for j in range(0, len(integerToString)):
@@ -156,7 +160,15 @@ def writeTweet(integerToString, probArray, wordCount):
                 wordInt = j
                 break
 
+    return ' '.join(tweet)
+
+def rules(integerToString, probArray, wordCount, tweet):
+
+    #tweet = generateTweet(integerToString, probArray, wordCount)
+
     return tweet
+
+
     
 def outputToTwitter(user, tweet):  
     '''
@@ -212,7 +224,7 @@ def print2dArray(arrayToPrint):
 # print2dArray(probArray)
 
 # print("")
-# print(writeTweet(integerToStringDict, probArray, 6))
+# print(generateTweet(integerToStringDict, probArray, 6))
 
 
 
@@ -227,9 +239,9 @@ stringToIntegerDict = dicts[1]
 countArray = count(wordArray, stringToIntegerDict)
 rowCountArray = rowTotals(countArray)
 probArray = calcProbabilities(countArray, rowCountArray)
-tweet = writeTweet(integerToStringDict, probArray, 33)
+tweet = generateTweet(integerToStringDict, probArray, 33)
 
 print(tweet)
 
-#outputToTwitter(twitterUser, tweet)
+outputToTwitter(twitterUser, tweet)
 
