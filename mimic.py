@@ -40,12 +40,12 @@ def createDictionary(wordArray):
 
 def count(wordArray, stringToInteger):
     '''
-    This create an array counting the number of times a word follows another word
+    This creates 2D array counting the number of times a word follows another word
     Parameters:
+        wordArray (string[]):  List of words
         stringToInteger (dict):  String to integer dictionary
-        size (int): Size of the output array (size * size)
     Returns:
-        countArray (int[[]]):  A 2D array counting the number of time a word follows another word
+        countArray (int[][]):  A 2D array counting the number of time a word follows another word
     '''
     dictSize = len(stringToInteger)
     countArray = [[0] * dictSize for _ in range(dictSize)] #https://stackoverflow.com/questions/13157961
