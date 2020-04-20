@@ -38,17 +38,24 @@ def createDictionary(wordArray):
 
     return [integerToString, stringToInteger]
 
-def count(integerToStringDict, size):
+def count(wordArray, stringToInteger):
     '''
     This create an array counting the number of times a word follows another word
     Parameters:
-        integerToStringDict (dict):  Integer to string dictionary
+        stringToInteger (dict):  String to integer dictionary
         size (int): Size of the output array (size * size)
     Returns:
-        countArray (int[]):  An array counting the number of time a word follows another word
+        countArray (int[[]]):  A 2D array counting the number of time a word follows another word
     '''
-    countArray = [[]]
+    dictSize = len(stringToInteger)
+    countArray = [[0] * dictSize for _ in range(dictSize)] #https://stackoverflow.com/questions/13157961
 
+    for i in range (0, len(wordArray) - 1):
+        firstWord = wordArray[i]
+        secondWord = wordArray[i+1]
+        firstWordInt = stringToInteger[firstWord]
+        secondWordInt = stringToInteger[secondWord]
+        countArray[firstWordInt][secondWordInt] += 1
 
     return countArray
 
@@ -88,4 +95,7 @@ dicts = createDictionary(words)
 print("\nInteger to string:")
 print(printDictionary(dicts[0]))
 print("\nString to integer:")
-print(printDictionary(dicts[1]))
+stringToIntegerDict = dicts[1]
+print(printDictionary(stringToIntegerDict))
+
+print2dArray(count(words, stringToIntegerDict))
