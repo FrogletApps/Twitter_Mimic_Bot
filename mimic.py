@@ -28,7 +28,8 @@ def readTweetsByUser(username, limit=200, retweets=False):
     Returns:
         wordArray (string[]):  Array of words in file in lower case.
     '''
-    data = twitter.get_user_timeline(screen_name="@"+username, count=limit, include_rts=retweets, tweet_mode='extended')
+    username = "@" + username
+    data = twitter.get_user_timeline(screen_name=username, count=limit, include_rts=retweets, tweet_mode='extended')
     wordArray = []
     for tweet in data:
         #print(tweet)
@@ -36,7 +37,9 @@ def readTweetsByUser(username, limit=200, retweets=False):
         tweetWords = []
         tweetWords = tweet.get("full_text").lower().split()
         for word in tweetWords:
-            wordArray.append(word)
+            #Remove @Users and web links
+            if "@" not in word and "http" not in word:
+                wordArray.append(word)
 
     return wordArray
 
@@ -182,6 +185,8 @@ def print2dArray(arrayToPrint):
     for x in arrayToPrint:
         print(x)
 
+
+
 # print("Original text:")
 # wordArray = getTweetsTest("testData.txt")
 # print(wordArray)
@@ -208,6 +213,8 @@ def print2dArray(arrayToPrint):
 
 # print("")
 # print(writeTweet(integerToStringDict, probArray, 6))
+
+
 
 #print(readTweetsByUser("qikipedia", 200, False))
 
