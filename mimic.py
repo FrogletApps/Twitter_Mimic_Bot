@@ -50,16 +50,18 @@ def splitIntoWords(tweetArray):
     Parameters:
         tweetArray (string[]):  Array of pre-processed tweets
     Returns:
-        wordArray (string[]):  Array of words in file in lower case.
+        wordArray (string[]):  Array of words in file
     '''
     wordArray = []
     for tweet in tweetArray:
         #print(tweet)
         #print()
-        for word in tweet:
+        words = tweet.split()
+        for word in words:
             #Remove @Users and web links
             if "@" not in word and "http" not in word:
-                wordArray.append(word)              
+                wordArray.append(word)
+    print(wordArray)
     return wordArray
 
 def createDictionary(wordArray):
@@ -223,7 +225,7 @@ def mimic(twitterUser):
     # print("Original text:")
     # wordArray = getTweetsTest("testData.txt")
     tweetArray = readTweetsByUser(twitterUser, 200, False)
-    print(tweetArray)
+    #print(tweetArray)
 
     '''Create dictionaries for the tweets'''
     dicts = createDictionary(wordArray)
@@ -251,7 +253,7 @@ def mimic(twitterUser):
     # print("")
 
     '''Generate a tweet'''
-    tweet = generateTweet(integerToStringDict, probArray, 33)
+    tweet = generateTweet(integerToStringDict, probArray, averageWords)
     # print(tweet)
     # print("")    
 
