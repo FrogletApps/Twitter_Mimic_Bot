@@ -7,8 +7,8 @@ from random import randint, random
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
-#Insert a Twitter username here (without the "@")
-userToMimic = "@qikipedia"
+#Insert a Twitter username here
+userToMimic = "qikipedia"
 
 def getTweetsTest(fileName):
     '''
@@ -41,8 +41,53 @@ def readTweetsByUser(username, limit=200, retweets=False):
         tweet = tweetData.get("full_text")
         tweetArray.append(tweet)
     return tweetArray
+
+def getInputTweetsStats(tweetArray):
+    '''
+    This will calculate statistics about the tweets
+    Parameters:
+        tweetArray (string[]):  Array of tweets
+    Returns:
+        outputStats ([]):  Array of statistics
+    '''
     wordArray = []
-    for tweet in data:
+    stats = []
+    outputStats = []
+    tweetNo = len(tweetArray)
+
+    for tweet in tweetArray:
+        tweetStats = []
+        #print(tweet)
+        wordArray = tweet.split()
+        tweetLength = len(wordArray)
+        tweetStats.append(tweetLength)
+
+        punctCount = 0
+        for word in wordArray:
+            if word[-1:] in ["!", "?" ,"."]:
+                punctCount += 1
+        tweetStats.append(punctCount)
+        #print(punctCount)
+
+        stats.append(tweetStats)
+
+
+    totalWords = 0
+    totalPunct = 0
+    countTweets = 0
+    for tweetStats in stats:
+        #print(tweetStats)
+        totalWords += tweetStats[0]
+        totalPunct += tweetStats[1]
+        countTweets += 1
+
+    averageWords = round(totalWords/countTweets)
+    averagePunct = round(totalPunct/countTweets)
+    outputStats.append(averageWords)
+    outputStats.append(averagePunct)
+    #print(outputStats)
+
+    return outputStats
 
 def splitIntoWords(tweetArray):
     '''
@@ -226,6 +271,14 @@ def mimic(twitterUser):
     # wordArray = getTweetsTest("testData.txt")
     tweetArray = readTweetsByUser(twitterUser, 200, False)
     #print(tweetArray)
+
+    stats = getInputTweetsStats(tweetArray)
+    #print(stats)
+    averageWords = stats[0]
+    averagePunct = stats[1] #Currently unused
+
+    wordArray = splitIntoWords(tweetArray)
+    #print(wordArray)
 
     '''Create dictionaries for the tweets'''
     dicts = createDictionary(wordArray)
