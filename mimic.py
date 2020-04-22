@@ -19,31 +19,47 @@ def getTweetsTest(fileName):
         wordArray (string[]):  Array of words in file in lower case.
     '''
     with open(fileName, "r") as inputFile:
-        return inputFile.read().lower().split() #Set to lower case and split into array
+        return inputFile.read().lower().split() #Set to lower case and split into array of words
 
 def readTweetsByUser(username, limit=200, retweets=False):
     '''
-    This will get tweets from Twitter
+    This will get tweets from Twitter and put them into an array of tweets
     Parameters:
         username (string):  The user whose tweets you want to recieve
         limit (int):  The number of tweets you want to recieve (this is the maximum you can get, there is a limit of 200, and even if you disable retweets they are still counted) (default:200)
         retweets (Boolean):  Enable retweets or not (default:False)
     Returns:
-        wordArray (string[]):  Array of words in file in lower case.
+        tweetArray (string[]):  Array of tweets
     '''
     username = "@" + username
-    data = twitter.get_user_timeline(screen_name=username, count=limit, include_rts=retweets, tweet_mode='extended')
-    wordArray = []
-    for tweet in data:
+    #dataArray contains a lot of metadata that we don't need
+    dataArray = twitter.get_user_timeline(screen_name=username, count=limit, include_rts=retweets, tweet_mode='extended')
+    tweetArray = []
+    for tweetData in dataArray:
         #print(tweet)
         #print()
-        tweetWords = []
-        tweetWords = tweet.get("full_text").lower().split()
-        for word in tweetWords:
+        tweet = tweetData.get("full_text")
+        tweetArray.append(tweet)
+    return tweetArray
+    wordArray = []
+    for tweet in data:
+
+def splitIntoWords(tweetArray):
+    '''
+    This will get the tweets and split them up into individual words (and remove certain unwanted elements like @usernames and hyperlinks)
+    Parameters:
+        tweetArray (string[]):  Array of pre-processed tweets
+    Returns:
+        wordArray (string[]):  Array of words in file in lower case.
+    '''
+    wordArray = []
+    for tweet in tweetArray:
+        #print(tweet)
+        #print()
+        for word in tweet:
             #Remove @Users and web links
             if "@" not in word and "http" not in word:
-                wordArray.append(word)
-
+                wordArray.append(word)              
     return wordArray
 
 def createDictionary(wordArray):
@@ -165,14 +181,6 @@ def generateTweet(integerToString, probArray, wordCount):
 
     return ' '.join(tweet)
 
-def rules(integerToString, probArray, wordCount, tweet):
-
-    #tweet = generateTweet(integerToString, probArray, wordCount)
-
-    return tweet
-
-
-    
 def outputToTwitter(user, tweet):  
     '''
     Post data to Twitter
