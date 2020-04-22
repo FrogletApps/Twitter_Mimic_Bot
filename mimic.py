@@ -7,6 +7,9 @@ from random import randint, random
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
+#Insert a Twitter username here (without the "@")
+userToMimic = "@qikipedia"
+
 def getTweetsTest(fileName):
     '''
     This will get test information from file and put it into an array (in lower case)
@@ -197,51 +200,61 @@ def print2dArray(arrayToPrint):
     for x in arrayToPrint:
         print(x)
 
+def mimic(twitterUser):
+    '''
+    Generate an imiation of a Twitter user's tweets
+    Parameters:
+        twitterUser (string):  Twitter user you want to imitate
+    '''
 
+    if twitterUser[0] == "@":
+        twitterUser = twitterUser[1:]
+    print(twitterUser)
 
-# print("Original text:")
-# wordArray = getTweetsTest("testData.txt")
-# print(wordArray)
+    '''Get Tweets'''
+    # print("Original text:")
+    # wordArray = getTweetsTest("testData.txt")
+    tweetArray = readTweetsByUser(twitterUser, 200, False)
+    print(tweetArray)
 
-# dicts = createDictionary(wordArray)
-# print("\nInteger to string:")
-# integerToStringDict = dicts[0]
-# print(printDictionary(integerToStringDict))
-# print("\nString to integer:")
-# stringToIntegerDict = dicts[1]
-# print(printDictionary(stringToIntegerDict))
+    '''Create dictionaries for the tweets'''
+    dicts = createDictionary(wordArray)
+    # print("\nInteger to string:")
+    integerToStringDict = dicts[0]
+    # print(printDictionary(integerToStringDict))
+    # print("\nString to integer:")
+    stringToIntegerDict = dicts[1]
+    # print(printDictionary(stringToIntegerDict))
+    # print("")
 
-# print("")
-# countArray = count(wordArray, stringToIntegerDict)
-# print2dArray(countArray)
+    '''Count the number of times a word follows another word'''
+    countArray = count(wordArray, stringToIntegerDict)
+    # print2dArray(countArray)
+    # print("")
 
-# print("")
-# rowCountArray = rowTotals(countArray)
-# print(rowCountArray)
+    '''Sum of rows of the count array'''
+    rowCountArray = rowTotals(countArray)
+    # print(rowCountArray)
+    # print("")
 
-# print("")
-# probArray = calcProbabilities(countArray, rowCountArray)
-# print2dArray(probArray)
+    '''Calculate the probability of a word following another word'''
+    probArray = calcProbabilities(countArray, rowCountArray)
+    # print2dArray(probArray)
+    # print("")
 
-# print("")
-# print(generateTweet(integerToStringDict, probArray, 6))
+    '''Generate a tweet'''
+    tweet = generateTweet(integerToStringDict, probArray, 33)
+    # print(tweet)
+    # print("")    
 
+    print("\nGenerated tweet:")
+    print(tweet)
 
+    outputCheck = input("Are you sure you want to post? (y/n)")
+    if outputCheck == "y":
+        outputToTwitter(twitterUser, tweet)
+        print("The tweet was posted")
+    else:
+        print("The tweet was not posted")
 
-#print(readTweetsByUser("qikipedia", 200, False))
-
-#wordArray = getTweetsTest("testData.txt")
-twitterUser = "qikipedia"
-wordArray = readTweetsByUser(twitterUser, 200, False)
-dicts = createDictionary(wordArray)
-integerToStringDict = dicts[0]
-stringToIntegerDict = dicts[1]
-countArray = count(wordArray, stringToIntegerDict)
-rowCountArray = rowTotals(countArray)
-probArray = calcProbabilities(countArray, rowCountArray)
-tweet = generateTweet(integerToStringDict, probArray, 33)
-
-print(tweet)
-
-outputToTwitter(twitterUser, tweet)
-
+mimic(userToMimic)
