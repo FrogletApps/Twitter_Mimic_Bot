@@ -126,7 +126,7 @@ def splitIntoWords(tweetArray):
             #Remove @Users and web links
             if "@" not in word and "http" not in word:
                 #Strip out double quotes and brackets
-                word = re.sub("\"|\(|\)", "", word)
+                word = re.sub("\"|“|”|\(|\)", "", word)
                 wordArray.append(word)
 
     #print(wordArray)
