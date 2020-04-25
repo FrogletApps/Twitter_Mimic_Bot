@@ -36,9 +36,18 @@ def readTweetsByUser(username, limit=200, retweets=False):
     dataArray = twitter.get_user_timeline(screen_name=username, count=limit, include_rts=retweets, tweet_mode='extended')
     tweetArray = []
     for tweetData in dataArray:
-        #print(tweet)
+        #print(tweetData)
         #print()
-        tweet = tweetData.get("full_text")
+        mediaType = ""
+        mediaURL = ""
+        if "extended_entities" in tweetData:
+            if "media" in tweetData["extended_entities"]:
+                if "type" in tweetData["extended_entities"]["media"][0]:
+                    mediaType = tweetData["extended_entities"]["media"][0]["type"]
+                    mediaURL = tweetData["extended_entities"]["media"][0]["media_url_https"]
+        #Collect Tweet, media type, and the media URL
+        tweet = [tweetData["full_text"], mediaType, mediaURL]
+        #print(tweet)
         tweetArray.append(tweet)
     return tweetArray
 
@@ -55,8 +64,9 @@ def getInputTweetsStats(tweetArray):
     outputStats = []
     tweetNo = len(tweetArray)
 
-    for tweet in tweetArray:
+    for miniTweetData in tweetArray:
         tweetStats = []
+        tweet = miniTweetData[0]
         #print(tweet)
         wordArray = tweet.split()
         tweetLength = len(wordArray)
@@ -69,22 +79,30 @@ def getInputTweetsStats(tweetArray):
         tweetStats.append(punctCount)
         #print(punctCount)
 
-        stats.append(tweetStats)
+        image = 0
+        if miniTweetData[1] == "photo":
+            image = 1            
+        tweetStats.append(image)
 
+        stats.append(tweetStats)
 
     totalWords = 0
     totalPunct = 0
+    totalImages = 0
     countTweets = 0
     for tweetStats in stats:
         #print(tweetStats)
         totalWords += tweetStats[0]
         totalPunct += tweetStats[1]
+        totalImages += tweetStats[2]
         countTweets += 1
 
     averageWords = round(totalWords/countTweets)
-    averagePunct = round(totalPunct/countTweets)
+    averagePunct = totalPunct/countTweets
+    averageImages = totalImages/countTweets
     outputStats.append(averageWords)
     outputStats.append(averagePunct)
+    outputStats.append(averageImages)
     #print(outputStats)
 
     return outputStats
@@ -93,20 +111,21 @@ def splitIntoWords(tweetArray):
     '''
     This will get the tweets and split them up into individual words (and remove certain unwanted elements like @usernames and hyperlinks)
     Parameters:
-        tweetArray (string[]):  Array of pre-processed tweets
+        tweetArray (string[]):  Array of tweets
     Returns:
-        wordArray (string[]):  Array of words in file
+        wordArray (string[]):  Array of words
     '''
     wordArray = []
     for tweet in tweetArray:
         #print(tweet)
         #print()
-        words = tweet.split()
+        words = tweet[0].split()
         for word in words:
             #Remove @Users and web links
             if "@" not in word and "http" not in word:
                 wordArray.append(word)
-    print(wordArray)
+            ##TODO:  Strip out double quotes and brackets
+    #print(wordArray)
     return wordArray
 
 def createDictionary(wordArray):
@@ -276,6 +295,7 @@ def mimic(twitterUser):
     #print(stats)
     averageWords = stats[0]
     averagePunct = stats[1] #Currently unused
+    averageImages = stats[2] #Currently unused
 
     wordArray = splitIntoWords(tweetArray)
     #print(wordArray)
