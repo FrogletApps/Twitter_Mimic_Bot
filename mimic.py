@@ -4,6 +4,7 @@
 from twython import Twython
 from secret import *
 from random import randint, random
+import re
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
@@ -76,6 +77,7 @@ def getInputTweetsStats(tweetArray):
         for word in wordArray:
             if word[-1:] in ["!", "?" ,"."]:
                 punctCount += 1
+            
         tweetStats.append(punctCount)
         #print(punctCount)
 
@@ -123,8 +125,10 @@ def splitIntoWords(tweetArray):
         for word in words:
             #Remove @Users and web links
             if "@" not in word and "http" not in word:
+                #Strip out double quotes and brackets
+                word = re.sub("\"|\(|\)", "", word)
                 wordArray.append(word)
-            ##TODO:  Strip out double quotes and brackets
+
     #print(wordArray)
     return wordArray
 
