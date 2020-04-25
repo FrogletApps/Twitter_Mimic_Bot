@@ -58,11 +58,11 @@ def getInputTweetsStats(tweetArray):
     Parameters:
         tweetArray (string[]):  Array of tweets
     Returns:
-        outputStats ([]):  Array of statistics
+        outputStats (dict):  Dictionary of statistics
     '''
     wordArray = []
     stats = []
-    outputStats = []
+    outputStats = {}
     tweetNo = len(tweetArray)
 
     for miniTweetData in tweetArray:
@@ -100,11 +100,12 @@ def getInputTweetsStats(tweetArray):
         countTweets += 1
 
     averageWords = round(totalWords/countTweets)
+
     averagePunct = totalPunct/countTweets
     averageImages = totalImages/countTweets
-    outputStats.append(averageWords)
-    outputStats.append(averagePunct)
-    outputStats.append(averageImages)
+    outputStats["avgWords"] = averageWords
+    outputStats["avgPunct"] = averagePunct
+    outputStats["avgImg"] = averageImages
     #print(outputStats)
 
     return outputStats
@@ -297,9 +298,9 @@ def mimic(twitterUser):
 
     stats = getInputTweetsStats(tweetArray)
     #print(stats)
-    averageWords = stats[0]
-    averagePunct = stats[1] #Currently unused
-    averageImages = stats[2] #Currently unused
+    averageWords = stats["avgWords"]
+    averagePunct = stats["avgPunct"] #Currently unused
+    averageImages = stats["avgImg"] #Currently unused
 
     wordArray = splitIntoWords(tweetArray)
     #print(wordArray)
