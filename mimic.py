@@ -281,13 +281,12 @@ def print2dArray(arrayToPrint):
     for x in arrayToPrint:
         print(x)
 
-def mimic(twitterUser):
+def calculateMimic(twitterUser):
     '''
-    Generate an imiation of a Twitter user's tweets
+    Run all the calculations needed to generate an imiation of a Twitter user's tweets
     Parameters:
         twitterUser (string):  Twitter user you want to imitate
     '''
-
     if twitterUser[0] == "@":
         twitterUser = twitterUser[1:]
     print(twitterUser)
@@ -301,7 +300,7 @@ def mimic(twitterUser):
     stats = getInputTweetsStats(tweetArray)
     #print(stats)
     averageWords = stats["avgWords"]
-    averagePunct = stats["avgPunct"] #Currently unused
+    averagePunct = stats["avgPunct"]
     averageImages = stats["avgImg"] #Currently unused
 
     wordArray = splitIntoWords(tweetArray)
@@ -333,7 +332,19 @@ def mimic(twitterUser):
     # print2dArray(probArray)
     # print("")
 
-    '''Generate a tweet'''
+    #Once this has all been generated pass it onto outputMimic
+    outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twitterUser)
+
+def outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twitterUser):
+    '''
+    Generate a tweet and give the option to output, try again or quit
+    Parameters:
+        integerToString (dict):  Dictionary arranged by integers and storing strings
+        probArray (int[][]):  A 2D array of the probabilities that a given word with follow another word
+        averageWords (int):  The average number of words in tweet
+        averagePunct (float):  The average punctuation in a tweet
+        twitterUser (string):  Twitter user you want to imitate
+    '''
     tweet = generateTweet(integerToStringDict, probArray, averageWords, averagePunct)
     # print(tweet)
     # print("")    
@@ -341,11 +352,16 @@ def mimic(twitterUser):
     print("\nGenerated tweet:")
     print(tweet)
 
-    outputCheck = input("Are you sure you want to post? (y/n)")
+    outputCheck = input("Are you sure you want to post? y=yes, n=no, 2=generate another without posting  ")
     if outputCheck == "y":
         outputToTwitter(twitterUser, tweet)
         print("The tweet was posted")
+    elif outputCheck == "2":
+        #Go again
+        outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twitterUser)
     else:
         print("The tweet was not posted")
 
-mimic(userToMimic)
+
+
+calculateMimic(userToMimic)
