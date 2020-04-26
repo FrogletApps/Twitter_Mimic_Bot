@@ -260,6 +260,8 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
     tweet = ' '.join(tweet)
     #Convert escaped HTML back into actual characters (eg &amp; to and)
     tweet = html.unescape(tweet)
+    #Capitalize the first letter of the tweet 
+    tweet = tweet.capitalize()
 
     return tweet
 
