@@ -352,7 +352,7 @@ def outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twit
     print("\nGenerated tweet:")
     print(tweet)
 
-    outputCheck = input("Are you sure you want to post? y=yes, n=no, 2=generate another without posting  ")
+    outputCheck = input("Are you sure you want to post? (y=yes, n=no, 2=generate another without posting)  ")
     if outputCheck == "y":
         outputToTwitter(twitterUser, tweet)
         print("The tweet was posted")
