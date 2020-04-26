@@ -9,7 +9,7 @@ import re
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 #Insert a Twitter username here
-userToMimic = "qikipedia"
+userToMimic = "realdonaldtrump"
 
 def getTweetsTest(fileName):
     '''
@@ -100,7 +100,6 @@ def getInputTweetsStats(tweetArray):
         countTweets += 1
 
     averageWords = round(totalWords/countTweets)
-
     averagePunct = totalPunct/countTweets
     averageImages = totalImages/countTweets
     outputStats["avgWords"] = averageWords
@@ -221,7 +220,7 @@ def calcProbabilities(countArray, rowCountArray):
         yCount += 1
     return probArray
 
-def generateTweet(integerToString, probArray, wordCount):
+def generateTweet(integerToString, probArray, wordCount, punctCount):
     '''
     This creates an array of the probability of a word following another word
     Parameters:
@@ -234,6 +233,7 @@ def generateTweet(integerToString, probArray, wordCount):
     tweet = [""]*wordCount
     wordInt = randint(0, len(integerToString) - 1)
     randomProb = 0
+    tweetPunctCount = 0
 
     for i in range(0, wordCount):
         #print(integerToString[wordInt])
@@ -241,7 +241,9 @@ def generateTweet(integerToString, probArray, wordCount):
         tweet[i] = newWord
         #If the last character is an end of sentence punctuation mark then end the tweet
         if newWord[-1:] in ["!", "?" ,"."]:
-            break; #Stop generating text by telling the for loop it's at the end
+            tweetPunctCount += 1
+            if i > wordCount/2 or tweetPunctCount > punctCount:
+                break; #Stop generating text
         randomProb = random()
 
         for j in range(0, len(integerToString)):
@@ -292,7 +294,7 @@ def mimic(twitterUser):
 
     '''Get Tweets'''
     # print("Original text:")
-    # wordArray = getTweetsTest("testData.txt")
+    #tweetArray = getTweetsTest("testData.txt")
     tweetArray = readTweetsByUser(twitterUser, 200, False)
     #print(tweetArray)
 
@@ -303,7 +305,8 @@ def mimic(twitterUser):
     averageImages = stats["avgImg"] #Currently unused
 
     wordArray = splitIntoWords(tweetArray)
-    #print(wordArray)
+    #wordArray = tweetArray #For testing if you're getting data from a file
+    print(wordArray)
 
     '''Create dictionaries for the tweets'''
     dicts = createDictionary(wordArray)
@@ -331,7 +334,7 @@ def mimic(twitterUser):
     # print("")
 
     '''Generate a tweet'''
-    tweet = generateTweet(integerToStringDict, probArray, averageWords)
+    tweet = generateTweet(integerToStringDict, probArray, averageWords, averagePunct)
     # print(tweet)
     # print("")    
 
