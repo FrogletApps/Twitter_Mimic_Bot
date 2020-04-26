@@ -252,7 +252,11 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
                 wordInt = j
                 break
 
-    return ' '.join(tweet)
+    #Puts the tweet together with spaces between
+    tweet = ' '.join(tweet)
+    #Convert escaped HTML back into actual characters (eg &amp; to and)
+    tweet = html.unescape(tweet)
+    return tweet
 
 def outputToTwitter(user, tweet):  
     '''
