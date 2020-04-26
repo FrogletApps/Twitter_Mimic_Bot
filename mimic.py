@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from twython import Twython
-from secret import *
+import html
+from itertools import groupby
 from random import randint, random
 import re
+from secret import *
+from twython import Twython
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
@@ -252,10 +254,13 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
                 wordInt = j
                 break
 
+    #Remove duplicate words (From https://stackoverflow.com/a/5738933/13360215)
+    tweet = [x[0] for x in groupby(tweet)]
     #Puts the tweet together with spaces between
     tweet = ' '.join(tweet)
     #Convert escaped HTML back into actual characters (eg &amp; to and)
     tweet = html.unescape(tweet)
+
     return tweet
 
 def outputToTwitter(user, tweet):  
