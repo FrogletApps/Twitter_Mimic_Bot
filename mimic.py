@@ -236,14 +236,20 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
     wordInt = randint(0, len(integerToString) - 1)
     randomProb = 0
     tweetPunctCount = 0
+    capitalize = True
 
     for i in range(0, wordCount):
         #print(integerToString[wordInt])
         newWord = integerToString[wordInt]
+        if capitalize:
+            #Capitalize the first letter
+            newWord = newWord.capitalize()
         tweet[i] = newWord
+        capitalize = False
         #If the last character is an end of sentence punctuation mark then end the tweet
         if newWord[-1:] in ["!", "?" ,"."]:
             tweetPunctCount += 1
+            capitalize = True
             if i > wordCount/2 or tweetPunctCount > punctCount:
                 break; #Stop generating text
         randomProb = random()
@@ -260,8 +266,6 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
     tweet = ' '.join(tweet)
     #Convert escaped HTML back into actual characters (eg &amp; to and)
     tweet = html.unescape(tweet)
-    #Capitalize the first letter of the tweet 
-    tweet = tweet.capitalize()
 
     return tweet
 
