@@ -423,20 +423,20 @@ def calculateMimic(twitterUser):
     # print("")
 
     #Once this has all been generated pass it onto outputMimic
-    outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probList, averageWords, averagePunct, twitterUser)
+    #outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
 
-def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probList, averageWords, averagePunct, twitterUser):
+def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser):
     '''
     Generate a tweet and give the option to output, try again or quit
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
         stringToInteger (dict):  Dictionary arranged by strings and storing integers
-        probList (int[][]):  A 2D list of the probabilities that a given word with follow another word
+        probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         averageWords (int):  The average number of words in tweet
         averagePunct (float):  The average punctuation in a tweet
         twitterUser (string):  Twitter user you want to imitate
     '''
-    tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probList, averageWords, averagePunct)
+    tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct)
     # print(tweet)
     # print("")    
 
@@ -449,7 +449,7 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probLis
         print("The tweet was posted")
     elif outputCheck == "2":
         #Go again
-        outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probList, averageWords, averagePunct, twitterUser)
+        outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
     else:
         print("The tweet was not posted")
 
