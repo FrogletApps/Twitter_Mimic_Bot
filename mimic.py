@@ -213,22 +213,27 @@ def calcProbabilities(countList, rowCountList):
         probList (int[][]):  A 2D list of the probabilities that a given word with follow another word
     '''
     listSize = len(countList)
-    probList = [[0] * (listSize) for _ in range(listSize)] #https://stackoverflow.com/questions/13157961
+    probList = []
     xCount = 0
     yCount = 0
 
     for y in countList:
-        cumulativeProb = 0
+        previousProb = 0
         for x in y:
-            if (rowCountList[yCount] != 0):
-                #print(round((x/rowCountList[yCount]) + cumulativeProb, 2))
-                probList[yCount][xCount] = round((x/rowCountList[yCount]) + cumulativeProb, 2)
-            else:
-                probList[yCount][xCount] = cumulativeProb
-            cumulativeProb = probList[yCount][xCount]
+            if previousProb < 1:
+                rowTotal = rowCountList[yCount]
+                if (rowTotal != 0):
+                    thisProb = round((x/rowTotal) + previousProb, 2)
+                    if thisProb != 0 and previousProb != thisProb:
+                        probList.append([xCount, yCount, thisProb])
+                        print([xCount, yCount, thisProb])
+                    previousProb = thisProb
             xCount += 1
         xCount = 0
         yCount += 1
+        print("")
+
+    print(probList)
     return probList
 
 def generateTweet(integerToString, stringToInteger, firstWordList, probList, wordCount, punctCount):
