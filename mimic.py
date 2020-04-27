@@ -405,10 +405,10 @@ def calculateMimic(twitterUser):
     dicts = createDictionary(wordList)
     # print("\nInteger to string:")
     integerToStringDict = dicts[0]
-    # print(printDictionary(integerToStringDict))
+    # printDictionary(integerToStringDict)
     # print("\nString to integer:")
     stringToIntegerDict = dicts[1]
-    # print(printDictionary(stringToIntegerDict))
+    # printDictionary(stringToIntegerDict)
     # print("")
 
     '''Count the number of times a word follows another word'''
