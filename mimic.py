@@ -141,8 +141,6 @@ def splitIntoWords(tweetList):
                     firstWordList.append(word)
                     firstWord = False
 
-    #print(wordList)
-    print(firstWordList)
     return [wordList, firstWordList]
 
 def createDictionary(wordList):
