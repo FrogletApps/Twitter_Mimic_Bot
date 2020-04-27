@@ -13,7 +13,7 @@ from twython import Twython
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 #Insert a Twitter username here
-userToMimic = "vexroboticsuk"
+userToMimic = "BarackObama"
 
 def getTweetsTest(fileName):
     '''
@@ -51,7 +51,7 @@ def readTweetsByUser(username, limit=200, retweets=False):
                     mediaType = tweetData["extended_entities"]["media"][0]["type"]
                     mediaURL = tweetData["extended_entities"]["media"][0]["media_url_https"]
         tweetText = tweetData["full_text"] + " <eot>" #Add a marker to show the End Of Tweet
-        print(tweetText)
+        #print(tweetText)
         #Collect Tweet, media type, and the media URL
         tweet = [tweetText, mediaType, mediaURL]
         #print(tweet)
@@ -226,19 +226,19 @@ def calcProbabilities(countList, rowCountList):
                 if (rowTotal != 0):
                     thisProb = round((x/rowTotal) + previousProb, 2)
                     if thisProb != 0 and previousProb != thisProb:
-                        print(str(xCount) + " " + str(yCount) + " " + str(thisProb))
+                        #print(str(xCount) + " " + str(yCount) + " " + str(thisProb))
                         rowList.append([xCount, thisProb])
                     previousProb = thisProb
             xCount += 1
 
-        print(rowList)
+        #print(rowList)
         probDict[yCount] = rowList
-        print("")
+        #print("")
 
         xCount = 0
         yCount += 1
 
-    print(probDict)
+    #print(probDict)
     return probDict
 
 def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wordCount, punctCount):
@@ -292,12 +292,14 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
 
         randomProb = random()
 
-        for j in range(0, len(integerToString)):
-            #print(str(probDict[wordInt][j]) + " > " + str(randomProb) + " : " + integerToString[j])
-            #for :
-            if (probDict[wordInt][j] > randomProb):
-                wordInt = j
-                break
+        nextWordProbs = probDict[wordInt]
+        #print(nextWordProbs)
+
+        for j in nextWordProbs:
+            if j[1] > randomProb:
+                wordInt = j[0]
+        
+        #print(wordInt)
 
     #Remove duplicate words (From https://stackoverflow.com/a/5738933/13360215)
     tweet = [x[0] for x in groupby(tweet)]
@@ -381,12 +383,12 @@ def calculateMimic(twitterUser):
 
     '''Get Tweets'''
     # print("Original text:")
-    #tweetList = getTweetsTest("testData.txt")
+    # tweetList = getTweetsTest("testData.txt")
     tweetList = readTweetsByUser(twitterUser, 200, False)
-    #print(tweetList)
+    # print(tweetList)
 
     stats = getInputTweetsStats(tweetList)
-    #print(stats)
+    # print(stats)
     averageWords = stats["avgWords"]
     averagePunct = stats["avgPunct"]
     averageImages = stats["avgImg"] #Currently unused
@@ -394,8 +396,10 @@ def calculateMimic(twitterUser):
     splitWordsOutput = splitIntoWords(tweetList)
     wordList = splitWordsOutput[0]
     firstWordList = splitWordsOutput[1]
-    #wordList = tweetList #For testing if you're getting data from a file
-    #print(wordList)
+    #For testing if you're getting data from a file
+    # wordList = tweetList
+    # firstWordList = ["The", "The", "The", "The"]
+    # print(wordList)
 
     '''Create dictionaries for the tweets'''
     dicts = createDictionary(wordList)
@@ -418,12 +422,14 @@ def calculateMimic(twitterUser):
     # print("")
 
     '''Calculate the probability of a word following another word'''
-    probList = calcProbabilities(countList, rowCountList)
-    # print2dList(probList)
+    probDict = calcProbabilities(countList, rowCountList)
+    # printDictionary(probDict)
     # print("")
 
+    storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
+
     #Once this has all been generated pass it onto outputMimic
-    #outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
+    outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
 
 def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser):
     '''
@@ -452,6 +458,7 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
         outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
     else:
         print("The tweet was not posted")
+
 
 
 
