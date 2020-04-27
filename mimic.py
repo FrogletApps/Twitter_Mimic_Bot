@@ -48,8 +48,10 @@ def readTweetsByUser(username, limit=200, retweets=False):
                 if "type" in tweetData["extended_entities"]["media"][0]:
                     mediaType = tweetData["extended_entities"]["media"][0]["type"]
                     mediaURL = tweetData["extended_entities"]["media"][0]["media_url_https"]
+        tweetText = tweetData["full_text"] + " <eot>" #Add a marker to show the End Of Tweet
+        print(tweetText)
         #Collect Tweet, media type, and the media URL
-        tweet = [tweetData["full_text"], mediaType, mediaURL]
+        tweet = [tweetText, mediaType, mediaURL]
         #print(tweet)
         tweetArray.append(tweet)
     return tweetArray
@@ -255,12 +257,21 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
         tweet.append(newWord)
         capitalize = False
 
-        #If the last character is an end of sentence punctuation mark then end the tweet
+        #Look for end of sentence punctuation marks
         if newWord[-1:] in ["!", "?" ,"."]:
             tweetPunctCount += 1
             capitalize = True
+            #Check to see if the tweet is around the right length
             if i > wordCount/2 or tweetPunctCount > punctCount:
                 break; #Stop generating text
+
+        #Look for end of tweet marker <eot>
+        if newWord == "<eot>":
+            tweet.pop()
+            #Check to see if the tweet is around the right length
+            if i > wordCount/2 or tweetPunctCount > punctCount:
+                break; #Stop generating text
+
         randomProb = random()
 
         for j in range(0, len(integerToString)):
