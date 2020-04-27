@@ -3,7 +3,7 @@
 
 import html
 from itertools import groupby
-from random import randint, random
+from random import choice, random #randint
 import re
 from secret import *
 from twython import Twython
@@ -171,7 +171,7 @@ def count(wordArray, stringToInteger):
     This creates 2D array counting the number of times a word follows another word
     Parameters:
         wordArray (string[]):  List of words
-        stringToInteger (dict):  String to integer dictionary
+        stringToInteger (dict):  Dictionary arranged by strings and storing integers
     Returns:
         countArray (int[][]):  A 2D array counting the number of time a word follows another word
     '''
@@ -231,7 +231,7 @@ def calcProbabilities(countArray, rowCountArray):
         yCount += 1
     return probArray
 
-def generateTweet(integerToString, probArray, wordCount, punctCount):
+def generateTweet(integerToString, stringToInteger, firstWordArray, probArray, wordCount, punctCount):
     '''
     This creates an array of the probability of a word following another word
     Parameters:
@@ -245,7 +245,8 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
 
     charCount = 0
     tweet = []
-    wordInt = randint(0, len(integerToString) - 1)
+    #wordInt = randint(0, len(integerToString) - 1)
+    wordInt = stringToInteger[choice(firstWordArray)]
     randomProb = 0
     tweetPunctCount = 0
     capitalize = True
@@ -377,19 +378,20 @@ def calculateMimic(twitterUser):
     # print("")
 
     #Once this has all been generated pass it onto outputMimic
-    outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twitterUser)
+    outputMimic(integerToStringDict, stringToIntegerDict, firstWordArray, probArray, averageWords, averagePunct, twitterUser)
 
-def outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twitterUser):
+def outputMimic(integerToStringDict, stringToIntegerDict, firstWordArray, probArray, averageWords, averagePunct, twitterUser):
     '''
     Generate a tweet and give the option to output, try again or quit
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
+        stringToInteger (dict):  Dictionary arranged by strings and storing integers
         probArray (int[][]):  A 2D array of the probabilities that a given word with follow another word
         averageWords (int):  The average number of words in tweet
         averagePunct (float):  The average punctuation in a tweet
         twitterUser (string):  Twitter user you want to imitate
     '''
-    tweet = generateTweet(integerToStringDict, probArray, averageWords, averagePunct)
+    tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordArray, probArray, averageWords, averagePunct)
     # print(tweet)
     # print("")    
 
@@ -402,7 +404,7 @@ def outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twit
         print("The tweet was posted")
     elif outputCheck == "2":
         #Go again
-        outputMimic(integerToStringDict, probArray, averageWords, averagePunct, twitterUser)
+        outputMimic(integerToStringDict, stringToIntegerDict, firstWordArray, probArray, averageWords, averagePunct, twitterUser)
     else:
         print("The tweet was not posted")
 
