@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import html
+from html import unescape
 from itertools import groupby
+from json import dump, load
 from random import choice, random #randint
-import re
+from re import sub
 from secret import *
+from time import time
 from twython import Twython
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
@@ -133,7 +135,7 @@ def splitIntoWords(tweetList):
             #Remove @Users and web links
             if "@" not in word and "http" not in word:
                 #Strip out double quotes and brackets
-                word = re.sub("\"|“|”|\(|\)", "", word)
+                word = sub("\"|“|”|\(|\)", "", word)
                 wordList.append(word)
                 if firstWord == True:
                     firstWordList.append(word)
@@ -293,7 +295,7 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probList, wor
     #Puts the tweet together with spaces between
     tweet = ' '.join(tweet)
     #Convert escaped HTML back into actual characters (eg &amp; to and)
-    tweet = html.unescape(tweet)
+    tweet = unescape(tweet)
 
     return tweet
 
