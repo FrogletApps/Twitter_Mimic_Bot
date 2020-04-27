@@ -324,6 +324,40 @@ def print2dList(listToPrint):
     for x in listToPrint:
         print(x)
 
+def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probList, averageWords, averagePunct, twitterUser):
+    '''
+    Store all the information locally to save time by not calling the Twitter API and recalculating everything
+    Parameters:
+        integerToString (dict):  Dictionary arranged by integers and storing strings
+        stringToInteger (dict):  Dictionary arranged by strings and storing integers
+        probList (int[][]):  A 2D list of the probabilities that a given word with follow another word
+        averageWords (int):  The average number of words in tweet
+        averagePunct (float):  The average punctuation in a tweet
+        twitterUser (string):  Twitter user you want to imitate
+    '''
+    store = {
+        "time": time(), 
+        "twitterUser": twitterUser,
+        "integerToStringDict": integerToStringDict, 
+        "stringToIntegerDict": stringToIntegerDict, 
+        "firstWordList": firstWordList, 
+        "probList": probList, 
+        "averageWords": averageWords, 
+        "averagePunct": averagePunct
+    }
+    with open('listfile.txt', 'w') as storeFile:
+        dump(store, storeFile)
+
+def readData(twitterUser):
+    '''
+    Store all the information locally to save time by not calling the Twitter API and recalculating everything
+    Parameters:
+        twitterUser (string):  Twitter user you want to imitate
+    Returns:
+        outputDictionary (dict):  This contains the information that was read from the file
+    '''
+
+
 def calculateMimic(twitterUser):
     '''
     Run all the calculations needed to generate an imiation of a Twitter user's tweets
