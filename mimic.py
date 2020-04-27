@@ -232,20 +232,29 @@ def generateTweet(integerToString, probArray, wordCount, punctCount):
     Returns:
         tweet (string):  A tweet which should mimic a Twitter user
     '''
-    tweet = [""]*wordCount
+    twitterMaxCharCount = 280 - 38 #38 is overhead from extra info in tweet (23 char + 15 max username length)
+
+    charCount = 0
+    tweet = []
     wordInt = randint(0, len(integerToString) - 1)
     randomProb = 0
     tweetPunctCount = 0
     capitalize = True
 
-    for i in range(0, wordCount):
-        #print(integerToString[wordInt])
+    for i in range(0, wordCount*2):
+        #If too many characters are generated then stop
+        if charCount >= twitterMaxCharCount:
+            tweet.pop()
+            break
         newWord = integerToString[wordInt]
+        #print(newWord)
+        charCount += len(newWord) + 1 #Add one for spaces
         if capitalize:
             #Capitalize the first letter
             newWord = newWord.capitalize()
-        tweet[i] = newWord
+        tweet.append(newWord)
         capitalize = False
+
         #If the last character is an end of sentence punctuation mark then end the tweet
         if newWord[-1:] in ["!", "?" ,"."]:
             tweetPunctCount += 1
@@ -320,7 +329,7 @@ def calculateMimic(twitterUser):
 
     wordArray = splitIntoWords(tweetArray)
     #wordArray = tweetArray #For testing if you're getting data from a file
-    print(wordArray)
+    #print(wordArray)
 
     '''Create dictionaries for the tweets'''
     dicts = createDictionary(wordArray)
