@@ -210,38 +210,43 @@ def calcProbabilities(countList, rowCountList):
         countList (int[][]):  2D list of numbers
         rowCountList (int[]):  A list of the sum of each row of the given 2D list
     Returns:
-        probList (int[][]):  A 2D list of the probabilities that a given word with follow another word
+        probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
     '''
     listSize = len(countList)
-    probList = []
+    probDict = {}
     xCount = 0
     yCount = 0
 
     for y in countList:
         previousProb = 0
+        rowList = []
         for x in y:
             if previousProb < 1:
                 rowTotal = rowCountList[yCount]
                 if (rowTotal != 0):
                     thisProb = round((x/rowTotal) + previousProb, 2)
                     if thisProb != 0 and previousProb != thisProb:
-                        probList.append([xCount, yCount, thisProb])
-                        print([xCount, yCount, thisProb])
+                        print(str(xCount) + " " + str(yCount) + " " + str(thisProb))
+                        rowList.append([xCount, thisProb])
                     previousProb = thisProb
             xCount += 1
-        xCount = 0
-        yCount += 1
+
+        print(rowList)
+        probDict[yCount] = rowList
         print("")
 
-    print(probList)
-    return probList
+        xCount = 0
+        yCount += 1
 
-def generateTweet(integerToString, stringToInteger, firstWordList, probList, wordCount, punctCount):
+    print(probDict)
+    return probDict
+
+def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wordCount, punctCount):
     '''
     This creates a list of the probability of a word following another word
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
-        probList (int[][]):  A 2D list of the probabilities that a given word with follow another word
+        probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         wordCount (int):  The number of words to put in the tweet (this is a limit, it could stop earlier if there is punctuation)
     Returns:
         tweet (string):  A tweet which should mimic a Twitter user
@@ -288,8 +293,9 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probList, wor
         randomProb = random()
 
         for j in range(0, len(integerToString)):
-            #print(str(probList[wordInt][j]) + " > " + str(randomProb) + " : " + integerToString[j])
-            if (probList[wordInt][j] > randomProb):
+            #print(str(probDict[wordInt][j]) + " > " + str(randomProb) + " : " + integerToString[j])
+            #for :
+            if (probDict[wordInt][j] > randomProb):
                 wordInt = j
                 break
 
@@ -329,13 +335,13 @@ def print2dList(listToPrint):
     for x in listToPrint:
         print(x)
 
-def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probList, averageWords, averagePunct, twitterUser):
+def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser):
     '''
     Store all the information locally to save time by not calling the Twitter API and recalculating everything
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
         stringToInteger (dict):  Dictionary arranged by strings and storing integers
-        probList (int[][]):  A 2D list of the probabilities that a given word with follow another word
+        probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         averageWords (int):  The average number of words in tweet
         averagePunct (float):  The average punctuation in a tweet
         twitterUser (string):  Twitter user you want to imitate
@@ -346,7 +352,7 @@ def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probList,
         "integerToStringDict": integerToStringDict, 
         "stringToIntegerDict": stringToIntegerDict, 
         "firstWordList": firstWordList, 
-        "probList": probList, 
+        "probDict": probDict, 
         "averageWords": averageWords, 
         "averagePunct": averagePunct
     }
