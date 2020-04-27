@@ -119,10 +119,13 @@ def splitIntoWords(tweetArray):
     Parameters:
         tweetArray (string[]):  Array of tweets
     Returns:
-        wordArray (string[]):  Array of words
+        wordArray (string[]):  Array of words from the user's tweets
+        firstWordArray (string[]):  Array of the first word used in a user's tweets
     '''
     wordArray = []
+    firstWordArray = []
     for tweet in tweetArray:
+        firstWord = True
         #print(tweet)
         #print()
         words = tweet[0].split()
@@ -132,9 +135,13 @@ def splitIntoWords(tweetArray):
                 #Strip out double quotes and brackets
                 word = re.sub("\"|“|”|\(|\)", "", word)
                 wordArray.append(word)
+                if firstWord == True:
+                    firstWordArray.append(word)
+                    firstWord = False
 
     #print(wordArray)
-    return wordArray
+    print(firstWordArray)
+    return [wordArray, firstWordArray]
 
 def createDictionary(wordArray):
     '''
@@ -338,7 +345,9 @@ def calculateMimic(twitterUser):
     averagePunct = stats["avgPunct"]
     averageImages = stats["avgImg"] #Currently unused
 
-    wordArray = splitIntoWords(tweetArray)
+    splitWordsOutput = splitIntoWords(tweetArray)
+    wordArray = splitWordsOutput[0]
+    firstWordArray = splitWordsOutput[1]
     #wordArray = tweetArray #For testing if you're getting data from a file
     #print(wordArray)
 
