@@ -329,7 +329,7 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
     tweet = [x[0] for x in groupby(tweet)]
     #Puts the tweet together with spaces between
     tweet = ' '.join(tweet)
-    #Convert escaped HTML back into actual characters (eg &amp; to and)
+    #Convert escaped HTML back into actual characters (eg &amp; to &)
     tweet = unescape(tweet)
 
     return tweet
@@ -397,7 +397,8 @@ def readData(twitterUser):
     try:
         with open(twitterUser + '.tmbd', 'rb') as storeFile:
             storedData = load(storeFile)
-            if storedData["time"] > time() - 7200:
+            #Calculate whether the cache should have expired
+            if storedData["time"] > time() - 5: #86400 is 1 day, 7200 is 2 hours
                 outputData = storedData
     except:
         #If the file doesn't exist or there is some error reading it then ignore it
