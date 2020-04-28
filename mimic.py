@@ -3,7 +3,7 @@
 
 from html import unescape
 from itertools import groupby
-from json import dump, load
+from pickle import dump, load
 from random import choice, random #randint
 from re import sub
 from secret import *
@@ -358,7 +358,7 @@ def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict,
         "averageWords": averageWords, 
         "averagePunct": averagePunct
     }
-    with open('listfile.txt', 'w') as storeFile:
+    with open(twitterUser + '.tmbd', 'wb') as storeFile:
         dump(store, storeFile)
 
 def readData(twitterUser):
@@ -367,9 +367,18 @@ def readData(twitterUser):
     Parameters:
         twitterUser (string):  Twitter user you want to imitate
     Returns:
-        outputDictionary (dict):  This contains the information that was read from the file
+        outputDictionary (dict):  This contains the information that was read from the file (this will be blank if the data had not been cached or the cache had expired)
     '''
-
+    outputData = {}
+    try:
+        with open(twitterUser + '.tmbd', 'rb') as storeFile:
+            storedData = load(storeFile)
+            if storedData["time"] > time() - 7200:
+                outputData = storedData
+    except:
+        #If the file doesn't exist or there is some error reading it then ignore it
+        pass
+    return outputData
 
 def calculateMimic(twitterUser):
     '''
@@ -381,52 +390,65 @@ def calculateMimic(twitterUser):
         twitterUser = twitterUser[1:]
     print(twitterUser)
 
-    '''Get Tweets'''
-    # print("Original text:")
-    # tweetList = getTweetsTest("testData.txt")
-    tweetList = readTweetsByUser(twitterUser, 200, False)
-    # print(tweetList)
+    cachedData = readData(twitterUser)
+    if cachedData == {}:
+        print("No cached data or cache has expired, now generating data")
+        '''Get Tweets'''
+        # print("Original text:")
+        # tweetList = getTweetsTest("testData.txt")
+        tweetList = readTweetsByUser(twitterUser, 200, False)
+        # print(tweetList)
 
-    stats = getInputTweetsStats(tweetList)
-    # print(stats)
-    averageWords = stats["avgWords"]
-    averagePunct = stats["avgPunct"]
-    averageImages = stats["avgImg"] #Currently unused
+        stats = getInputTweetsStats(tweetList)
+        # print(stats)
+        averageWords = stats["avgWords"]
+        averagePunct = stats["avgPunct"]
+        averageImages = stats["avgImg"] #Currently unused
 
-    splitWordsOutput = splitIntoWords(tweetList)
-    wordList = splitWordsOutput[0]
-    firstWordList = splitWordsOutput[1]
-    #For testing if you're getting data from a file
-    # wordList = tweetList
-    # firstWordList = ["The", "The", "The", "The"]
-    # print(wordList)
+        splitWordsOutput = splitIntoWords(tweetList)
+        wordList = splitWordsOutput[0]
+        firstWordList = splitWordsOutput[1]
+        #For testing if you're getting data from a file
+        # wordList = tweetList
+        # firstWordList = ["The", "The", "The", "The"]
+        # print(wordList)
 
-    '''Create dictionaries for the tweets'''
-    dicts = createDictionary(wordList)
-    # print("\nInteger to string:")
-    integerToStringDict = dicts[0]
-    # printDictionary(integerToStringDict)
-    # print("\nString to integer:")
-    stringToIntegerDict = dicts[1]
-    # printDictionary(stringToIntegerDict)
-    # print("")
+        '''Create dictionaries for the tweets'''
+        dicts = createDictionary(wordList)
+        # print("\nInteger to string:")
+        integerToStringDict = dicts[0]
+        # printDictionary(integerToStringDict)
+        # print("\nString to integer:")
+        stringToIntegerDict = dicts[1]
+        # printDictionary(stringToIntegerDict)
+        # print("")
 
-    '''Count the number of times a word follows another word'''
-    countList = count(wordList, stringToIntegerDict)
-    # print2dList(countList)
-    # print("")
+        '''Count the number of times a word follows another word'''
+        countList = count(wordList, stringToIntegerDict)
+        # print2dList(countList)
+        # print("")
 
-    '''Sum of rows of the count list'''
-    rowCountList = rowTotals(countList)
-    # print(rowCountList)
-    # print("")
+        '''Sum of rows of the count list'''
+        rowCountList = rowTotals(countList)
+        # print(rowCountList)
+        # print("")
 
-    '''Calculate the probability of a word following another word'''
-    probDict = calcProbabilities(countList, rowCountList)
-    # printDictionary(probDict)
-    # print("")
+        '''Calculate the probability of a word following another word'''
+        probDict = calcProbabilities(countList, rowCountList)
+        # printDictionary(probDict)
+        # print("")
 
-    storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
+        storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
+
+    else:
+        print("Reading data from cache")
+        integerToStringDict = cachedData["integerToStringDict"]
+        stringToIntegerDict = cachedData["stringToIntegerDict"]
+        firstWordList = cachedData["firstWordList"]
+        probDict = cachedData["probDict"]
+        averageWords = cachedData["averageWords"]
+        averagePunct = cachedData["averagePunct"]
+        #averageImages = cachedData["averageImages"]
 
     #Once this has all been generated pass it onto outputMimic
     outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
