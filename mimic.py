@@ -26,20 +26,32 @@ def getTweetsTest(fileName):
     with open(fileName, "r") as inputFile:
         return inputFile.read().lower().split() #Set to lower case and split into list of words
 
-def readTweetsByUser(username, limit=200, retweets=False):
+def readTweetsByUser(username, limit, maxId=0):
     '''
     This will get tweets from Twitter and put them into an list of tweets
     Parameters:
         username (string):  The user whose tweets you want to recieve
-        limit (int):  The number of tweets you want to recieve (this is the maximum you can get, there is a limit of 200, and even if you disable retweets they are still counted) (default:200)
-        retweets (Boolean):  Enable retweets or not (default:False)
+        limit (int):  The number of tweets you want to recieve (this is the maximum you can get, there is a limit of 200, and even if you disable retweets they are still counted)
+        maxID (int):  Get tweets with an ID less than this (tweets older than this tweet)
     Returns:
         tweetList (string[]):  List of tweets
     '''
-    username = "@" + username
-    #dataList contains a lot of metadata that we don't need
-    dataList = twitter.get_user_timeline(screen_name=username, count=limit, include_rts=retweets, tweet_mode='extended')
     tweetList = []
+    atUsername = "@" + username
+
+    #200 is the maximum you can get from one request
+    if limit >= 200:
+        tweetsNo = 200
+    else:
+        tweetsNo = limit
+    limit = limit - tweetsNo #Calculate the number of extra tweets that you still need to get
+
+    if maxId != 0:
+        dataList = twitter.get_user_timeline(screen_name=atUsername, count=tweetsNo, max_id=maxId, include_rts=False, tweet_mode='extended')
+    else:
+        dataList = twitter.get_user_timeline(screen_name=atUsername, count=tweetsNo, include_rts=False, tweet_mode='extended')
+
+    tweetId = 0
     for tweetData in dataList:
         #print(tweetData)
         #print()
@@ -51,12 +63,18 @@ def readTweetsByUser(username, limit=200, retweets=False):
                     mediaType = tweetData["extended_entities"]["media"][0]["type"]
                     mediaURL = tweetData["extended_entities"]["media"][0]["media_url_https"]
         tweetText = tweetData["full_text"] + " <eot>" #Add a marker to show the End Of Tweet
+        tweetId = tweetData["id_str"]
         #print(tweetText)
         #Collect Tweet, media type, and the media URL
         tweet = [tweetText, mediaType, mediaURL]
         #print(tweet)
         tweetList.append(tweet)
-    print(str(len(tweetList)) + " tweets found")
+
+    if limit > 0:
+        extraDataList = readTweetsByUser(username, limit, tweetId)
+        for extraTweet in extraDataList:
+            tweetList.append(extraTweet)
+
     return tweetList
 
 def getInputTweetsStats(tweetList):
@@ -397,7 +415,8 @@ def calculateMimic(twitterUser):
         '''Get Tweets'''
         # print("Original text:")
         # tweetList = getTweetsTest("testData.txt")
-        tweetList = readTweetsByUser(twitterUser, 200, False)
+        tweetList = readTweetsByUser(twitterUser, 1000, False)
+        print(str(len(tweetList)) + " tweets found")
         # print(tweetList)
 
         stats = getInputTweetsStats(tweetList)
