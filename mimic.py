@@ -56,6 +56,7 @@ def readTweetsByUser(username, limit=200, retweets=False):
         tweet = [tweetText, mediaType, mediaURL]
         #print(tweet)
         tweetList.append(tweet)
+    print(str(len(tweetList)) + " tweets found")
     return tweetList
 
 def getInputTweetsStats(tweetList):
