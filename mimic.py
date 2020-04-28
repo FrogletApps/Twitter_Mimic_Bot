@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+from csv import reader
 from html import unescape
 from itertools import groupby
 from pickle import dump, load
@@ -12,8 +13,8 @@ from twython import Twython
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
-#Insert a Twitter username here
-userToMimic = "BarackObama"
+#Insert a Twitter username here (leave this blank to randomly pick someone to mimic)
+userToMimic = ""
 
 def getTweetsTest(fileName):
     '''
@@ -396,22 +397,37 @@ def readData(twitterUser):
         with open(twitterUser + '.tmbd', 'rb') as storeFile:
             storedData = load(storeFile)
             #Calculate whether the cache should have expired
-            if storedData["time"] > time() - 7200: #86400 is 1 day, 7200 is 2 hours
+            if storedData["time"] > time() - 86400: #86400 is 1 day, 7200 is 2 hours
                 outputData = storedData
     except:
         #If the file doesn't exist or there is some error reading it then ignore it
         pass
     return outputData
 
-def calculateMimic(twitterUser):
+def getTwitterUser(twitterUser):
+
+    if twitterUser != "":
+        if twitterUser[0] == "@":
+            twitterUser = twitterUser[1:]
+    else:
+        with open('twitterUsers.csv', 'r', encoding='utf-8-sig') as twitterUsersCSV:
+            twitterUsers = reader(twitterUsersCSV)
+            twitterUsersList = []
+            for row in twitterUsers:
+                twitterUsersList.append(row[0])
+            #print(twitterUsersList)
+            twitterUser = choice(twitterUsersList)
+
+    print(twitterUser)
+    return twitterUser
+
+def calculateMimic(userToMimic):
     '''
     Run all the calculations needed to generate an imiation of a Twitter user's tweets
     Parameters:
-        twitterUser (string):  Twitter user you want to imitate
+        userToMimic (string):  Username of a Twitter account you want to imitate
     '''
-    if twitterUser[0] == "@":
-        twitterUser = twitterUser[1:]
-    print(twitterUser)
+    twitterUser = getTwitterUser(userToMimic)
 
     cachedData = readData(twitterUser)
     if cachedData == {}:
