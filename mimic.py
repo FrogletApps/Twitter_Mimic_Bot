@@ -6,7 +6,7 @@ from itertools import groupby
 from pickle import dump, load
 from random import choice, randint, random
 from re import sub
-from secret import *
+from secretKeys import *
 from time import time
 from twython import Twython
 

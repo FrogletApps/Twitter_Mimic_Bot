@@ -1,5 +1,5 @@
 # Don't upload secret keys!
-secret.py
+secretKeys.py
 
 # Twitter Mimic Bot Data Files
 *.tmbd
