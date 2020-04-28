@@ -1,6 +1,9 @@
 # Don't upload secret keys!
 secret.py
 
+# Cache files
+*_mimicdata.json
+
 #VS Code config files
 .vscode/settings.json
 
