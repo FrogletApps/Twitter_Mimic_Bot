@@ -321,9 +321,12 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
 
         for j in nextWordProbs:
             if j[1] > randomProb:
+                #print(j[1])
+                #print(randomProb)
                 wordInt = j[0]
+                break
         
-        #print(wordInt)
+        #print(str(wordInt) + " " + integerToString[wordInt])
 
     #Remove duplicate words (From https://stackoverflow.com/a/5738933/13360215)
     tweet = [x[0] for x in groupby(tweet)]
