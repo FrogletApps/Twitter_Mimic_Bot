@@ -31,7 +31,7 @@ def readTweetsByUser(username, limit, maxId=0):
     This will get tweets from Twitter and put them into an list of tweets
     Parameters:
         username (string):  The user whose tweets you want to receive
-        limit (int):  The number of tweets you want to receive
+        limit (int):  The number of tweets you want to receive (this is a maximum number, and not necessarily the number you will get because this includes retweets which are not shown)
         maxID (int):  Get tweets with an ID less than this (tweets older than this tweet)
     Returns:
         tweetList (string[]):  List of tweets
