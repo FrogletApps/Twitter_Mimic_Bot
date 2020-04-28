@@ -272,12 +272,7 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
     '''
     twitterMaxCharCount = 280 - 38 #38 is overhead from extra info in tweet (23 char + 15 max username length)
 
-    if random() > 0.5:
-        #More random (but less like real tweets)
-        wordInt = randint(0, len(integerToString) - 1)
-    else:
-        #More realistic (but can lead to predictable results)
-        wordInt = stringToInteger[choice(firstWordList)]
+    wordInt = stringToInteger[choice(firstWordList)]
 
     capitalize = True
     charCount = 0
@@ -401,7 +396,7 @@ def readData(twitterUser):
         with open(twitterUser + '.tmbd', 'rb') as storeFile:
             storedData = load(storeFile)
             #Calculate whether the cache should have expired
-            if storedData["time"] > time() - 5: #86400 is 1 day, 7200 is 2 hours
+            if storedData["time"] > time() - 7200: #86400 is 1 day, 7200 is 2 hours
                 outputData = storedData
     except:
         #If the file doesn't exist or there is some error reading it then ignore it
@@ -424,7 +419,7 @@ def calculateMimic(twitterUser):
         '''Get Tweets'''
         # print("Original text:")
         # tweetList = getTweetsTest("testData.txt")
-        tweetList = readTweetsByUser(twitterUser, 1000, False)
+        tweetList = readTweetsByUser(twitterUser, 10000, False)
         print(str(len(tweetList)) + " tweets found")
         # print(tweetList)
 
