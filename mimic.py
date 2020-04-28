@@ -4,7 +4,7 @@
 from html import unescape
 from itertools import groupby
 from pickle import dump, load
-from random import choice, random #randint
+from random import choice, randint, random
 from re import sub
 from secret import *
 from time import time
@@ -272,13 +272,18 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
     '''
     twitterMaxCharCount = 280 - 38 #38 is overhead from extra info in tweet (23 char + 15 max username length)
 
-    charCount = 0
-    tweet = []
-    #wordInt = randint(0, len(integerToString) - 1)
-    wordInt = stringToInteger[choice(firstWordList)]
-    randomProb = 0
-    tweetPunctCount = 0
+    if random() > 0.5:
+        #More random (but less like real tweets)
+        wordInt = randint(0, len(integerToString) - 1)
+    else:
+        #More realistic (but can lead to predictable results)
+        wordInt = stringToInteger[choice(firstWordList)]
+
     capitalize = True
+    charCount = 0
+    randomProb = 0
+    tweet = []
+    tweetPunctCount = 0
 
     for i in range(0, wordCount*2):
         #If too many characters are generated then stop
