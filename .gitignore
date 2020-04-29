@@ -4,6 +4,9 @@ secretKeys.py
 # Twitter Mimic Bot Data Files
 *.tmbd
 
+# Testing data files
+*.txt
+
 #VS Code config files
 .vscode/settings.json
 
