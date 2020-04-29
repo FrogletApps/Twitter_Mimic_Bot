@@ -27,7 +27,7 @@ def getTweetsTest(fileName):
     Returns:
         wordList (string[]):  List of words in file in lower case.
     '''
-    with open(fileName, "r") as inputFile:
+    with open(join(path[0], fileName), "r") as inputFile:
         return inputFile.read().lower().split() #Set to lower case and split into list of words
 
 def printDictionary(dictionary):
@@ -424,7 +424,7 @@ def getTwitterUser(twitterUser):
         if twitterUser[0] == "@":
             twitterUser = twitterUser[1:]
     else:
-        with open('twitterUsers.csv', 'r', encoding='utf-8-sig') as twitterUsersCSV:
+        with open(join(path[0], 'twitterUsers.csv'), 'r', encoding='utf-8-sig') as twitterUsersCSV:
             twitterUsers = reader(twitterUsersCSV)
             twitterUsersList = []
             for row in twitterUsers:
