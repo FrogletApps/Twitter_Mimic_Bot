@@ -520,6 +520,7 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
     tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct)
     outputToTwitter(twitterUser, tweet)
 
+    """
     print("\nGenerated tweet:")
     print(tweet)
 
@@ -532,6 +533,7 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
         outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
     else:
         print("The tweet was not posted")
+    """
 
 
 
