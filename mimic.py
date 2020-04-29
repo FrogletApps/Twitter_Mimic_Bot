@@ -286,6 +286,8 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
     This creates a list of the probability of a word following another word
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
+        stringToInteger (dict):  Dictionary arranged by strings and storing integers
+        firstWordList (string[]):  List of the first word used in a user's tweets
         probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         wordCount (int):  The average number of words in tweet, this function aims to generate something around this length
         punctCount (float):  The average punctuation in a tweet
