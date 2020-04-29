@@ -4,10 +4,12 @@
 from csv import reader
 from html import unescape
 from itertools import groupby
+from os.path import join
 from pickle import dump, load
 from random import choice, randint, random
 from re import sub
 from secretKeys import *
+from sys import path
 from time import time
 from twython import Twython
 
@@ -387,7 +389,7 @@ def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict,
         "averageWords": averageWords, 
         "averagePunct": averagePunct
     }
-    with open(twitterUser + '.tmbd', 'wb') as storeFile:
+    with open(join(path[0], twitterUser + '.tmbd'), 'wb') as storeFile:
         dump(store, storeFile)
 
 def readData(twitterUser):
@@ -400,7 +402,7 @@ def readData(twitterUser):
     '''
     outputData = {}
     try:
-        with open(twitterUser + '.tmbd', 'rb') as storeFile:
+        with open(join(path[0], twitterUser + '.tmbd'), 'rb') as storeFile:
             storedData = load(storeFile)
             #Calculate whether the cache should have expired
             if storedData["time"] > time() - 86400: #86400 is 1 day, 7200 is 2 hours
