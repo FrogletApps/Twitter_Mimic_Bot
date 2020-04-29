@@ -16,6 +16,7 @@ twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 #Insert a Twitter username here (leave this blank to randomly pick someone to mimic)
 userToMimic = ""
 
+"""
 def getTweetsTest(fileName):
     '''
     This will get test information from file and put it into a list (in lower case)
@@ -26,6 +27,25 @@ def getTweetsTest(fileName):
     '''
     with open(fileName, "r") as inputFile:
         return inputFile.read().lower().split() #Set to lower case and split into list of words
+
+def printDictionary(dictionary):
+    '''
+    Print a dictionary (from: https://www.codevscolor.com/python-print-key-value-dictionary/)
+    Parameters:
+        dictionary (dict):  Dictionary to print
+    '''
+    for item in dictionary:
+        print("Key:{}, Value:{}".format(item, dictionary[item]))
+
+def print2dList(listToPrint):
+    '''
+    Print a 2D list
+    Parameters:
+        listToPrint ([]):  List to print
+    '''
+    for x in listToPrint:
+        print(x)
+"""
 
 def readTweetsByUser(username, limit, maxId=0):
     '''
@@ -341,24 +361,6 @@ def outputToTwitter(user, tweet):
         tweet (string):  The tweet that has been generated
     '''
     twitter.update_status(status= "User: " + user + "\nGenerated Tweet: " + tweet)
-
-def printDictionary(dictionary):
-    '''
-    Print a dictionary (from: https://www.codevscolor.com/python-print-key-value-dictionary/)
-    Parameters:
-        dictionary (dict):  Dictionary to print
-    '''
-    for item in dictionary:
-        print("Key:{}, Value:{}".format(item, dictionary[item]))
-
-def print2dList(listToPrint):
-    '''
-    Print a 2D list
-    Parameters:
-        listToPrint ([]):  List to print
-    '''
-    for x in listToPrint:
-        print(x)
 
 def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser):
     '''
