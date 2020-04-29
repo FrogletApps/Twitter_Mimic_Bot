@@ -287,7 +287,8 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
         probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
-        wordCount (int):  The number of words to put in the tweet (this is a limit, it could stop earlier if there is punctuation)
+        wordCount (int):  The average number of words in tweet, this function aims to generate something around this length
+        punctCount (float):  The average punctuation in a tweet
     Returns:
         tweet (string):  A tweet which should mimic a Twitter user
     '''
@@ -368,6 +369,7 @@ def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict,
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
         stringToInteger (dict):  Dictionary arranged by strings and storing integers
+        firstWordList (string[]):  List of the first word used in a user's tweets
         probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         averageWords (int):  The average number of words in tweet
         averagePunct (float):  The average punctuation in a tweet
@@ -507,14 +509,14 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
         stringToInteger (dict):  Dictionary arranged by strings and storing integers
+        firstWordList (string[]):  List of the first word used in a user's tweets
         probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         averageWords (int):  The average number of words in tweet
         averagePunct (float):  The average punctuation in a tweet
         twitterUser (string):  Twitter user you want to imitate
     '''
     tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct)
-    # print(tweet)
-    # print("")    
+    outputToTwitter(twitterUser, tweet)
 
     print("\nGenerated tweet:")
     print(tweet)
