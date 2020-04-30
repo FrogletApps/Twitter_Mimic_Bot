@@ -19,16 +19,21 @@ search = twitter.search(q="@twimimicbot", since_id=lastId, count=1, tweet_mode='
 username = ""
 requestUser = ""
 tweetId = 0
+ownName = False
 for tweetData in search["statuses"]:
     #print(tweetData)
     tweet = tweetData["full_text"]
     tweetId = tweetData["id"]
     requestUser = "@" + tweetData["user"]["screen_name"]
     for word in tweet.split():
-        if word[0] == "@" and "@twimimicbot" not in word:
-            #We could go through the whole tweet and do multiple, but I don't want to spam anyone
-            username = word
-            break
+        if word[0] == "@":
+            #Check that it is not getting its own mention, but it will mimic itself if mentioned twice
+            if word == "@twimimicbot" and ownName == False:
+                countOwnName = True
+            else:
+                #We could go through the whole tweet and do multiple, but I don't want to spam anyone
+                username = word
+                break
 
 if username != "" and tweetId != 0:
     #print(username)
