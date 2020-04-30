@@ -12,7 +12,7 @@ twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 lastId = 0
 with open(join(path[0], 'last_id.txt'), 'r') as storeFile:
     lastId = storeFile.read()
-    print(lastId)
+    #print(lastId)
 
 search = twitter.search(q="@twimimicbot", since_id=lastId, count=1, tweet_mode='extended')
 
@@ -20,7 +20,7 @@ username = ""
 requestUser = ""
 tweetId = 0
 for tweetData in search["statuses"]:
-    print(tweetData)
+    #print(tweetData)
     tweet = tweetData["full_text"]
     tweetId = tweetData["id"]
     requestUser = "@" + tweetData["user"]["screen_name"]
@@ -31,8 +31,8 @@ for tweetData in search["statuses"]:
             break
 
 if username != "" and tweetId != 0:
-    print(username)
-    print(tweetId)
+    #print(username)
+    #print(tweetId)
     tweetNo = 0
     try:
         tweetNo = len(twitter.get_user_timeline(screen_name=username, count=200, include_rts=False))
@@ -40,17 +40,15 @@ if username != "" and tweetId != 0:
         pass
     if tweetNo > 10:
         #Found some tweets, this means we can mimic it
-        print(":)")
         calculateMimic(username, requestUser, tweetId)
     else:
         #Could not find enough tweets (not including retweets), cannot mimic this account
-        print(":(")
         twitter.update_status(status=requestUser + " Could not find enough tweets (not including retweets) to mimic " + username[1:], in_reply_to_status=tweetId)
 
     #Write the ID to file so we know where to search from next time
     with open(join(path[0], 'last_id.txt'), 'w') as storeFile:
         storeFile.write(str(tweetId))
-else:
-    print("No mentions found")
+#else:
+    #print("No mentions found")
 
 
