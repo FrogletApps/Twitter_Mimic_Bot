@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+#Run this script from startMimic.py
+
 from csv import reader
 from html import unescape
 from itertools import groupby
@@ -14,9 +16,6 @@ from time import time
 from twython import Twython
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-
-#Insert a Twitter username here (leave this blank to randomly pick someone to mimic)
-userToMimic = ""
 
 """
 def getTweetsTest(fileName):
@@ -310,7 +309,7 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
     Returns:
         tweet (string):  A tweet which should mimic a Twitter user
     '''
-    twitterMaxCharCount = 280 - 38 #38 is overhead from extra info in tweet (23 char + 15 max username length)
+    twitterMaxCharCount = 280 - 39 #39 is maximum overhead from extra info in tweet (24 char + 15 max username length)
 
     wordInt = stringToInteger[choice(firstWordList)]
 
@@ -372,14 +371,19 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
 
     return tweet
 
-def outputToTwitter(user, tweet):  
+def outputToTwitter(user, tweet, replyTo, replyId):  
     '''
     Post data to Twitter
     Parameters:
         user (string):  The username that is being impersonated
         tweet (string):  The tweet that has been generated
+        replyTo (string):  The username to reply to (if the tweet was requested manually by a user)
+        replyId (int):  The tweet ID to reply to (if the tweet was requested manually by a user)
     '''
-    twitter.update_status(status= "User: " + user + "\nGenerated Tweet: " + tweet)
+    if replyTo == "":
+        twitter.update_status(status= "User: " + user + "\nGenerated Tweet: " + tweet)
+    else:
+        twitter.update_status(status= replyTo + " User: " + user + "\nGenerated Tweet: " + tweet, in_reply_to_status_id=replyId)
 
 def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser):
     '''
@@ -451,11 +455,13 @@ def getTwitterUser(twitterUser):
     #print(twitterUser)
     return twitterUser
 
-def calculateMimic(userToMimic):
+def calculateMimic(userToMimic, replyTo="", replyId=0):
     '''
     Run all the calculations needed to generate an imiation of a Twitter user's tweets
     Parameters:
         userToMimic (string):  Username of a Twitter account you want to imitate
+        replyTo (string):  The username to reply to (if the tweet was requested manually by a user)
+        replyId (int):  The tweet ID to reply to (if the tweet was requested manually by a user)
     '''
     twitterUser = getTwitterUser(userToMimic)
 
@@ -509,7 +515,9 @@ def calculateMimic(userToMimic):
         # printDictionary(probDict)
         # print("")
 
-        storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
+        #Don't cache one off requests by twitter users
+        if replyTo == "":
+            storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
 
     else:
         # print("Reading data from cache")
@@ -523,9 +531,9 @@ def calculateMimic(userToMimic):
         #averageImages = cachedData["averageImages"]
 
     #Once this has all been generated pass it onto outputMimic
-    outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
+    outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser, replyTo, replyId)
 
-def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser):
+def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser, replyTo, replyId):
     '''
     Generate a tweet and give the option to output, try again or quit
     Parameters:
@@ -537,6 +545,8 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
         averagePunct (float):  The average punctuation in a tweet
         averageUpper (float):  The average amount that a tweet starts with an uppercase
         twitterUser (string):  Twitter user you want to imitate
+        replyTo (string):  The username to reply to (if the tweet was requested manually by a user)
+        replyId (int):  The tweet ID to reply to (if the tweet was requested manually by a user)
     '''
     tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper)
     outputToTwitter(twitterUser, tweet)
@@ -547,16 +557,11 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
     """
     outputCheck = input("Are you sure you want to post? (y=yes, n=no, 2=generate another without posting)  ")
     if outputCheck == "y":
-        outputToTwitter(twitterUser, tweet)
+        outputToTwitter(twitterUser, tweet, replyTo, replyId)
         print("The tweet was posted")
     elif outputCheck == "2":
         #Go again
-        outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
+        outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser, replyTo, replyId)
     else:
         print("The tweet was not posted")
     """
-
-
-
-
-calculateMimic(userToMimic)
