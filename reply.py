@@ -29,7 +29,7 @@ for tweetData in search["statuses"]:
         if word[0] == "@":
             #Check that it is not getting its own mention, but it will mimic itself if mentioned twice
             if word == "@twimimicbot" and ownName == False:
-                countOwnName = True
+                ownName = True
             else:
                 #We could go through the whole tweet and do multiple, but I don't want to spam anyone
                 username = word
