@@ -116,19 +116,28 @@ def getInputTweetsStats(tweetList):
     for miniTweetData in tweetList:
         tweetStats = []
         tweet = miniTweetData[0]
-        #print(tweet)
         wordList = tweet.split()
+        #print(tweet)
+
+        #Calculate the length of a tweet
         tweetLength = len(wordList)
         tweetStats.append(tweetLength)
 
+        #Amount of end of phrase punctuation in a tweet
         punctCount = 0
         for word in wordList:
             if word[-1:] in ["!", "?" ,"."]:
                 punctCount += 1
-            
         tweetStats.append(punctCount)
         #print(punctCount)
 
+        #Number of tweets which start with a capital letter
+        upperCount = 0
+        if tweet[0].isupper():
+            upperCount += 1
+        tweetStats.append(upperCount)
+
+        #Check whether an image has been attached to the tweet
         image = 0
         if miniTweetData[1] == "photo":
             image = 1            
@@ -138,20 +147,24 @@ def getInputTweetsStats(tweetList):
 
     totalWords = 0
     totalPunct = 0
+    totalUpper = 0
     totalImages = 0
     countTweets = 0
     for tweetStats in stats:
         #print(tweetStats)
         totalWords += tweetStats[0]
         totalPunct += tweetStats[1]
-        totalImages += tweetStats[2]
+        totalUpper += tweetStats[2]
+        totalImages += tweetStats[3]
         countTweets += 1
 
     averageWords = round(totalWords/countTweets)
     averagePunct = totalPunct/countTweets
+    averageUpper = totalUpper/countTweets
     averageImages = totalImages/countTweets
     outputStats["avgWords"] = averageWords
     outputStats["avgPunct"] = averagePunct
+    outputStats["avgUpper"] = averageUpper
     outputStats["avgImg"] = averageImages
     #print(outputStats)
 
@@ -283,7 +296,7 @@ def calcProbabilities(countList, rowCountList):
     #print(probDict)
     return probDict
 
-def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wordCount, punctCount):
+def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wordCount, punctCount, upperCount):
     '''
     This creates a list of the probability of a word following another word
     Parameters:
@@ -293,6 +306,7 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
         probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         wordCount (int):  The average number of words in tweet, this function aims to generate something around this length
         punctCount (float):  The average punctuation in a tweet
+        upperCount (float):  The average amount that a tweet starts with an uppercase
     Returns:
         tweet (string):  A tweet which should mimic a Twitter user
     '''
@@ -314,9 +328,9 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
         newWord = integerToString[wordInt]
         #print(newWord)
         charCount += len(newWord) + 1 #Add one for spaces
-        if capitalize and not newWord[0].isupper():
-            #Capitalize the first letter
-            newWord = newWord.capitalize()
+        if capitalize and not newWord[0].isupper() and upperCount > random():
+            #Capitalize the first letter of the word
+            newWord = newWord[0].capitalize()
         tweet.append(newWord)
         capitalize = False
 
@@ -367,7 +381,7 @@ def outputToTwitter(user, tweet):
     '''
     twitter.update_status(status= "User: " + user + "\nGenerated Tweet: " + tweet)
 
-def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser):
+def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser):
     '''
     Store all the information locally to save time by not calling the Twitter API and recalculating everything
     Parameters:
@@ -377,6 +391,7 @@ def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict,
         probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         averageWords (int):  The average number of words in tweet
         averagePunct (float):  The average punctuation in a tweet
+        averageUpper (float):  The average amount that a tweet starts with an uppercase
         twitterUser (string):  Twitter user you want to imitate
     '''
     store = {
@@ -387,7 +402,8 @@ def storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict,
         "firstWordList": firstWordList, 
         "probDict": probDict, 
         "averageWords": averageWords, 
-        "averagePunct": averagePunct
+        "averagePunct": averagePunct,
+        "averageUpper": averageUpper
     }
     with open(join(path[0], twitterUser + '.tmbd'), 'wb') as storeFile:
         dump(store, storeFile)
@@ -457,6 +473,7 @@ def calculateMimic(userToMimic):
         # print(stats)
         averageWords = stats["avgWords"]
         averagePunct = stats["avgPunct"]
+        averageUpper = stats["avgUpper"]
         averageImages = stats["avgImg"] #Currently unused
 
         splitWordsOutput = splitIntoWords(tweetList)
@@ -492,7 +509,7 @@ def calculateMimic(userToMimic):
         # printDictionary(probDict)
         # print("")
 
-        storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
+        storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
 
     else:
         print("Reading data from cache")
@@ -502,12 +519,13 @@ def calculateMimic(userToMimic):
         probDict = cachedData["probDict"]
         averageWords = cachedData["averageWords"]
         averagePunct = cachedData["averagePunct"]
+        averageUpper = cachedData["averageUpper"]
         #averageImages = cachedData["averageImages"]
 
     #Once this has all been generated pass it onto outputMimic
-    outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
+    outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
 
-def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser):
+def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser):
     '''
     Generate a tweet and give the option to output, try again or quit
     Parameters:
@@ -517,10 +535,11 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
         probDict (dict[dict]):  A 2D dictionary of the probabilities that a given word with follow another word
         averageWords (int):  The average number of words in tweet
         averagePunct (float):  The average punctuation in a tweet
+        averageUpper (float):  The average amount that a tweet starts with an uppercase
         twitterUser (string):  Twitter user you want to imitate
     '''
-    tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct)
     outputToTwitter(twitterUser, tweet)
+    tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper)
    
     print("\nGenerated tweet:")
     print(tweet)
