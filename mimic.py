@@ -448,7 +448,7 @@ def getTwitterUser(twitterUser):
             #print(twitterUsersList)
             twitterUser = choice(twitterUsersList)
 
-    print(twitterUser)
+    #print(twitterUser)
     return twitterUser
 
 def calculateMimic(userToMimic):
@@ -461,12 +461,12 @@ def calculateMimic(userToMimic):
 
     cachedData = readData(twitterUser)
     if cachedData == {}:
-        print("No cached data or cache has expired, now generating data")
+        #print("No cached data or cache has expired, now generating data")
         '''Get Tweets'''
         # print("Original text:")
         # tweetList = getTweetsTest("testData.txt")
         tweetList = readTweetsByUser(twitterUser, 10000, False)
-        print(str(len(tweetList)) + " tweets found")
+        #print(str(len(tweetList)) + " tweets found")
         # print(tweetList)
 
         stats = getInputTweetsStats(tweetList)
@@ -512,7 +512,7 @@ def calculateMimic(userToMimic):
         storeData(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
 
     else:
-        print("Reading data from cache")
+        # print("Reading data from cache")
         integerToStringDict = cachedData["integerToStringDict"]
         stringToIntegerDict = cachedData["stringToIntegerDict"]
         firstWordList = cachedData["firstWordList"]
@@ -538,11 +538,11 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
         averageUpper (float):  The average amount that a tweet starts with an uppercase
         twitterUser (string):  Twitter user you want to imitate
     '''
-    outputToTwitter(twitterUser, tweet)
     tweet = generateTweet(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper)
+    outputToTwitter(twitterUser, tweet)
    
-    print("\nGenerated tweet:")
-    print(tweet)
+    # print("\nGenerated tweet:")
+    # print(tweet)
 
     """
     outputCheck = input("Are you sure you want to post? (y=yes, n=no, 2=generate another without posting)  ")
