@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from json import dump, load
+from mimic import *
 from os.path import join
 from secretKeys import *
 from sys import path
@@ -9,16 +9,16 @@ from twython import Twython
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
-last_id = 0
-with open(join(path[0], 'last_id.json'), 'r') as storeFile:
-    last_id = load(storeFile)
-    print(last_id)
+lastId = 0
+with open(join(path[0], 'last_id.txt'), 'r') as storeFile:
+    lastId = storeFile.read()
+    print(lastId)
 
-search = twitter.search(q="@twimimicbot", since_id=last_id, count=1, tweet_mode='extended')
+search = twitter.search(q="@twimimicbot", since_id=lastId, count=1, tweet_mode='extended')
 
 username = ""
 requestUser = ""
-tweetIid = 0
+tweetId = 0
 for tweetData in search["statuses"]:
     print(tweetData)
     tweet = tweetData["full_text"]
@@ -41,18 +41,15 @@ if username != "" and tweetId != 0:
     if tweetNo > 10:
         #Found some tweets, this means we can mimic it
         print(":)")
+        calculateMimic(username, requestUser, tweetId)
     else:
         #Could not find enough tweets (not including retweets), cannot mimic this account
         print(":(")
-        twitter.update_status(status=requestUser + " Could not find enough tweets (not including retweets) to mimic " + username[1:], in_reply_to_status_id=tweetId)
+        twitter.update_status(status=requestUser + " Could not find enough tweets (not including retweets) to mimic " + username[1:], in_reply_to_status=tweetId)
 
     #Write the ID to file so we know where to search from next time
-    try:
-        last_id = search["statuses"][0]["id"]
-        with open(join(path[0], 'last_id.json'), 'w') as storeFile:
-            dump(last_id, storeFile)
-    except:
-        pass
+    with open(join(path[0], 'last_id.txt'), 'w') as storeFile:
+        storeFile.write(str(tweetId))
 else:
     print("No mentions found")
 
