@@ -551,7 +551,7 @@ def outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDic
         print("The tweet was posted")
     elif outputCheck == "2":
         #Go again
-        outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, twitterUser)
+        outputMimic(integerToStringDict, stringToIntegerDict, firstWordList, probDict, averageWords, averagePunct, averageUpper, twitterUser)
     else:
         print("The tweet was not posted")
     """
