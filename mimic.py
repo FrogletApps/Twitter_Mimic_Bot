@@ -371,14 +371,14 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
 
     return tweet
 
-def outputToTwitter(user, tweet, replyTo, replyId):  
+def outputToTwitter(user, tweet, replyTo="", replyId=0):  
     '''
     Post data to Twitter
     Parameters:
         user (string):  The username that is being impersonated
         tweet (string):  The tweet that has been generated
-        replyTo (string):  The username to reply to (if the tweet was requested manually by a user)
-        replyId (int):  The tweet ID to reply to (if the tweet was requested manually by a user)
+        replyTo (string):  The username to reply to (if the tweet was requested manually by a user) (optional)
+        replyId (int):  The tweet ID to reply to (if the tweet was requested manually by a user) (optional)
     '''
     if replyTo == "":
         twitter.update_status(status= "User: " + user + "\nGenerated Tweet: " + tweet)

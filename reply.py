@@ -43,7 +43,7 @@ if username != "" and tweetId != 0:
         calculateMimic(username, requestUser, tweetId)
     else:
         #Could not find enough tweets (not including retweets), cannot mimic this account
-        twitter.update_status(status=requestUser + " Could not find enough tweets (not including retweets) to mimic " + username[1:], in_reply_to_status=tweetId)
+        twitter.update_status(status=requestUser + " Could not find enough tweets (not including retweets) to mimic " + username[1:], in_reply_to_status_id=tweetId)
 
     #Write the ID to file so we know where to search from next time
     with open(join(path[0], 'last_id.txt'), 'w') as storeFile:
