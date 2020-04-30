@@ -314,7 +314,7 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
         newWord = integerToString[wordInt]
         #print(newWord)
         charCount += len(newWord) + 1 #Add one for spaces
-        if capitalize:
+        if capitalize and not newWord[0].isupper():
             #Capitalize the first letter
             newWord = newWord.capitalize()
         tweet.append(newWord)
