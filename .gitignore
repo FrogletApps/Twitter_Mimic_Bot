@@ -4,6 +4,9 @@ secretKeys.py
 # Twitter Mimic Bot Data Files
 *.tmbd
 
+# Last search ID
+last_id.json
+
 # Testing data files
 *.txt
 
