@@ -368,6 +368,8 @@ def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wor
     tweet = ' '.join(tweet)
     #Convert escaped HTML back into actual characters (eg &amp; to &)
     tweet = unescape(tweet)
+    #Remove random "<" from the EOT text that for some reason happen a lot for UniKentCompPO but no other accounts
+    tweet = sub("<", "", tweet)
 
     return tweet
 
