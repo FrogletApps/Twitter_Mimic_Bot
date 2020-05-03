@@ -3,6 +3,7 @@
 
 #Run this script from startMimic.py
 
+#from collections import Counter
 from csv import reader
 from html import unescape
 from itertools import groupby
@@ -178,6 +179,7 @@ def splitIntoWords(tweetList):
         wordList (string[]):  List of words from the user's tweets
         firstWordList (string[]):  List of the first word used in a user's tweets
     '''
+    #countWords = []
     wordList = []
     firstWordList = []
     for tweet in tweetList:
@@ -191,9 +193,17 @@ def splitIntoWords(tweetList):
                 #Strip out double quotes and brackets
                 word = sub("\"|“|”|\(|\)", "", word)
                 wordList.append(word)
+                #countWords.append(word)
+                #print(word)
                 if firstWord == True:
                     firstWordList.append(word)
                     firstWord = False
+
+    #Code for generating stats for the report
+    #print("words")
+    #print(len(wordList))
+    #print("unique words")
+    #print(len(Counter(countWords)))
 
     return [wordList, firstWordList]
 
