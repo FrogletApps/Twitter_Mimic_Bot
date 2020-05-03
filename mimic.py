@@ -463,8 +463,6 @@ def getTwitterUser(twitterUser):
                 twitterUsersList.append(row[0])
             #print(twitterUsersList)
             twitterUser = choice(twitterUsersList)
-
-    #print(twitterUser)
     return twitterUser
 
 def calculateMimic(userToMimic, replyTo="", replyId=0):
