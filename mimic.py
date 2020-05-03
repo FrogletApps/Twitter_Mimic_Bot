@@ -490,7 +490,7 @@ def calculateMimic(userToMimic, replyTo="", replyId=0):
         averageWords = stats["avgWords"]
         averagePunct = stats["avgPunct"]
         averageUpper = stats["avgUpper"]
-        averageImages = stats["avgImg"] #Currently unused
+        #averageImages = stats["avgImg"] #Currently unused
 
         splitWordsOutput = splitIntoWords(tweetList)
         wordList = splitWordsOutput[0]
