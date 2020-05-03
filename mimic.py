@@ -307,7 +307,7 @@ def calcProbabilities(countList, rowCountList):
 
 def generateTweet(integerToString, stringToInteger, firstWordList, probDict, wordCount, punctCount, upperCount):
     '''
-    This creates a list of the probability of a word following another word
+    Puts words together based on the probabilityDictionary and applies certain rules
     Parameters:
         integerToString (dict):  Dictionary arranged by integers and storing strings
         stringToInteger (dict):  Dictionary arranged by strings and storing integers
