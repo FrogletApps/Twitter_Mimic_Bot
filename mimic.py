@@ -446,7 +446,7 @@ def readData(twitterUser):
 
 def getTwitterUser(twitterUser):
     '''
-    Run all the calculations needed to generate an imiation of a Twitter user's tweets
+    Get a username, or make sure the one supplied is in the correct format
     Parameters:
         twitterUser (string):  Username of a Twitter account you want to imitate (this can be left blank to randomly choose an account to mimic)
     Returns:
