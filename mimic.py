@@ -481,9 +481,9 @@ def calculateMimic(userToMimic, replyTo="", replyId=0):
         '''Get Tweets'''
         # print("Original text:")
         # tweetList = getTweetsTest("testData.txt")
-        tweetList = readTweetsByUser(twitterUser, 10000, False)
         #print(str(len(tweetList)) + " tweets found")
         # print(tweetList)
+        tweetList = readTweetsByUser(twitterUser, 10000)
 
         stats = getInputTweetsStats(tweetList)
         # print(stats)
